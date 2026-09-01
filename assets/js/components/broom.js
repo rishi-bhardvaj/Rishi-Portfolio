@@ -40,38 +40,45 @@ export function initBroom() {
   let targetY = 0;
   let lastScrollY = window.scrollY;
   let scrollVelocity = 0;
+  let currentTilt = 0;
   let isDragging = false;
   let startDragY = 0;
   let startScrollY = 0;
+  let lastSparkleTime = 0;
 
   function updateBroomPosition() {
     const trackHeight = track.clientHeight - broomContainer.clientHeight;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
-    if (maxScroll > 0) {
-      const scrollRatio = window.scrollY / maxScroll;
-      targetY = scrollRatio * trackHeight;
+    if (maxScroll > 0 && trackHeight > 0) {
+      targetY = (window.scrollY / maxScroll) * trackHeight;
     } else {
       targetY = 0;
     }
 
-    // Smooth Lerp
-    currentY += (targetY - currentY) * 0.22;
-    broomContainer.style.transform = `translateY(${currentY}px)`;
-
-    // Tilt based on velocity
-    const speed = window.scrollY - lastScrollY;
-    scrollVelocity += (speed - scrollVelocity) * 0.15;
-    lastScrollY = window.scrollY;
-
-    const tilt = Math.max(-25, Math.min(25, scrollVelocity * 0.7));
-    if (broomSvg) {
-      broomSvg.style.transform = `rotate(${tilt}deg)`;
+    if (isDragging) {
+      currentY = targetY;
+    } else {
+      currentY += (targetY - currentY) * 0.35;
     }
 
-    // Emit sparkle if moving
-    if (Math.abs(scrollVelocity) > 2 && Math.random() > 0.4) {
-      createBroomSparkle(broomContainer);
+    broomContainer.style.transform = `translate3d(0, ${currentY.toFixed(2)}px, 0)`;
+
+    const speed = window.scrollY - lastScrollY;
+    scrollVelocity += (speed - scrollVelocity) * 0.25;
+    lastScrollY = window.scrollY;
+
+    const targetTilt = Math.max(-28, Math.min(28, scrollVelocity * 0.65));
+    currentTilt += (targetTilt - currentTilt) * 0.2;
+
+    if (broomSvg) {
+      broomSvg.style.transform = `rotate(${currentTilt.toFixed(2)}deg)`;
+    }
+
+    const now = performance.now();
+    if (Math.abs(scrollVelocity) > 2 && now - lastSparkleTime > 120) {
+      lastSparkleTime = now;
+      createBroomSparkle(track, currentY);
     }
 
     requestAnimationFrame(updateBroomPosition);
@@ -79,65 +86,78 @@ export function initBroom() {
 
   requestAnimationFrame(updateBroomPosition);
 
-  // Sparkle generator
-  function createBroomSparkle(parent) {
+  function createBroomSparkle(parentTrack, broomY) {
     const sparkle = document.createElement('div');
     sparkle.className = 'broom-sparkle';
-    const dx = (Math.random() - 0.5) * 24;
-    const dy = (Math.random() - 0.5) * 20 - 10;
+    const dx = (Math.random() - 0.5) * 20;
+    const dy = (Math.random() - 0.5) * 16 - 8;
     sparkle.style.setProperty('--dx', `${dx}px`);
     sparkle.style.setProperty('--dy', `${dy}px`);
-    sparkle.style.left = `${16 + (Math.random() - 0.5) * 10}px`;
-    sparkle.style.top = `${55 + (Math.random() - 0.5) * 10}px`;
-
-    parent.appendChild(sparkle);
-    setTimeout(() => {
-      sparkle.remove();
-    }, 700);
+    sparkle.style.left = `${(parentTrack.clientWidth / 2 - 2) + (Math.random() - 0.5) * 10}px`;
+    sparkle.style.top = `${broomY + 54 + (Math.random() - 0.5) * 8}px`;
+    parentTrack.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 700);
   }
 
-  // Draggable Broom Support
+  function stopDragging() {
+    if (isDragging) {
+      isDragging = false;
+      document.documentElement.style.scrollBehavior = '';
+      document.body.style.userSelect = '';
+      document.body.style.webkitUserSelect = '';
+    }
+  }
+
   broomContainer.addEventListener('mousedown', (e) => {
+    e.preventDefault();
     isDragging = true;
     startDragY = e.clientY;
     startScrollY = window.scrollY;
+    document.documentElement.style.scrollBehavior = 'auto';
     document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    }
   });
 
   window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
+    e.preventDefault();
     const trackHeight = track.clientHeight - broomContainer.clientHeight;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const deltaY = e.clientY - startDragY;
-    const scrollDelta = (deltaY / trackHeight) * maxScroll;
-    window.scrollTo(0, startScrollY + scrollDelta);
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (isDragging) {
-      isDragging = false;
-      document.body.style.userSelect = '';
+    if (trackHeight > 0 && maxScroll > 0) {
+      const deltaY = e.clientY - startDragY;
+      const scrollDelta = (deltaY / trackHeight) * maxScroll;
+      window.scrollTo(0, Math.max(0, Math.min(maxScroll, startScrollY + scrollDelta)));
     }
   });
 
-  // Touch Support
+  window.addEventListener('mouseup', stopDragging);
+
   broomContainer.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    startDragY = e.touches[0].clientY;
-    startScrollY = window.scrollY;
-  }, { passive: true });
+    if (e.touches.length > 0) {
+      isDragging = true;
+      startDragY = e.touches[0].clientY;
+      startScrollY = window.scrollY;
+      document.documentElement.style.scrollBehavior = 'auto';
+      if (e.cancelable) e.preventDefault();
+    }
+  }, { passive: false });
 
   window.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
+    if (!isDragging || e.touches.length === 0) return;
+    if (e.cancelable) e.preventDefault();
     const trackHeight = track.clientHeight - broomContainer.clientHeight;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const deltaY = e.touches[0].clientY - startDragY;
-    const scrollDelta = (deltaY / trackHeight) * maxScroll;
-    window.scrollTo(0, startScrollY + scrollDelta);
-  }, { passive: true });
+    if (trackHeight > 0 && maxScroll > 0) {
+      const deltaY = e.touches[0].clientY - startDragY;
+      const scrollDelta = (deltaY / trackHeight) * maxScroll;
+      window.scrollTo(0, Math.max(0, Math.min(maxScroll, startScrollY + scrollDelta)));
+    }
+  }, { passive: false });
 
-  window.addEventListener('touchend', () => {
-    isDragging = false;
-  });
+  window.addEventListener('touchend', stopDragging);
+  window.addEventListener('touchcancel', stopDragging);
 }
 

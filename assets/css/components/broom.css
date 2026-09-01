@@ -1,0 +1,94 @@
+/* ==========================================================================
+   FLYING BROOM SCROLLBAR COMPONENT
+   Magical Harry Potter Nimbus / Firebolt Flying Broomstick Scroll Tracker
+   ========================================================================== */
+
+.flying-broom-track {
+  position: fixed;
+  top: 70px;
+  right: 6px;
+  bottom: 20px;
+  width: 38px;
+  pointer-events: none;
+  z-index: 9995;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .flying-broom-track {
+    right: 2px;
+    width: 28px;
+  }
+}
+
+.flying-broom-container {
+  position: absolute;
+  top: 0;
+  transform: translateY(0);
+  will-change: transform;
+  pointer-events: auto;
+  cursor: grab;
+  transition: transform 0.08s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flying-broom-container:active {
+  cursor: grabbing;
+}
+
+/* Detailed SVG Broom */
+.flying-broom-svg {
+  width: 32px;
+  height: 64px;
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.45));
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@media (max-width: 640px) {
+  .flying-broom-svg {
+    width: 24px;
+    height: 48px;
+  }
+}
+
+/* Sparkling Stardust Particles behind the broom */
+.broom-sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent-gold-light);
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fde047, 0 0 12px #ca8a04;
+  pointer-events: none;
+  animation: sparkle-fade 0.7s forwards ease-out;
+}
+
+@keyframes sparkle-fade {
+  0% {
+    opacity: 1;
+    transform: scale(1.2) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2) translate(var(--dx, -10px), var(--dy, -20px));
+  }
+}
+
+/* Subtle Golden Scroll Track Line */
+.broom-guide-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(176, 158, 117, 0.15),
+    rgba(158, 29, 29, 0.4) 50%,
+    rgba(176, 158, 117, 0.15)
+  );
+  border-radius: 1px;
+}
+

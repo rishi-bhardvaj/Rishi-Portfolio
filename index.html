@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rishi Bhardvaj &bull; Software Engineer Broadsheet Edition</title>
+  
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Rishi Bhardvaj • Software Engineer & Backend Architect" />
+  <meta name="description" content="The Broadsheet Edition portfolio of Rishi Bhardvaj — Software Engineer at EdgeVerve (Infosys) building enterprise banking backends and high-throughput distributed systems." />
+  <meta name="theme-color" content="#e6dabf" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Pirata One, Cinzel Decorative, Playfair Display, Space Mono, Newsreader, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel+Decorative:wght@700;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Daily Broadsheet Self-Contained Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="bg-[#e6dabf] text-[#16120b]">
+
+  <!-- TOP VINTAGE NAVIGATION -->
+  <header class="vintage-navbar">
+    <div class="vintage-nav-inner">
+      <!-- Name / Masthead Brand -->
+      <a href="#" class="nav-brand">
+        <span class="nav-brand-crest">RB</span>
+        <span class="nav-brand-name">Rishi Bhardvaj</span>
+        <span class="nav-brand-subtitle">The Record of a Software Engineer</span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="nav-links-desktop">
+        <a href="#work" class="nav-link">WORK</a>
+        <a href="#stack" class="nav-link">STACK</a>
+        <a href="#ledger" class="nav-link">LEDGER</a>
+        <a href="#contact" class="nav-link">CONTACT</a>
+      </nav>
+
+      <!-- Action Controls (Music, Sound, Theme, Hire CTA, Mobile Hamburger) -->
+      <div class="nav-controls">
+        <!-- Hedwig's Theme Music Player Toggle -->
+        <button id="musicToggleBtn" class="nav-icon-btn" aria-label="Play Harry Potter Theme (Hedwig's Theme)" title="Play Harry Potter Theme Song 🎵">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+        </button>
+
+        <!-- Sound FX Toggle Button -->
+        <button id="soundToggleBtn" class="nav-icon-btn" aria-label="Toggle Sound Effects" title="Sound FX: Muted">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>
+        </button>
+
+        <!-- Lumos / Nox Theme Switcher Button -->
+        <button id="themeToggleBtn" class="nav-icon-btn" aria-label="Toggle Broadsheet Theme" title="Broadsheet Edition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+
+        <!-- Direct CTA -->
+        <a href="#contact" class="btn-ink hidden sm:inline-flex">HIRE HIM</a>
+
+        <!-- Mobile Hamburger Toggle Button -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Open Mobile Menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Reading Progress Bar -->
+    <div id="scrollProgressBar" class="scroll-progress-bar"></div>
+  </header>
+
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div id="mobileNavBackdrop" class="mobile-nav-backdrop"></div>
+  <aside id="mobileNavDrawer" class="mobile-nav-drawer" aria-label="Mobile Navigation">
+    <div>
+      <div class="mobile-nav-header">
+        <div class="flex items-center gap-2">
+          <span class="font-masthead text-2xl text-[var(--text-ink)]">RB</span>
+          <span class="font-headline font-bold text-lg text-[var(--text-ink)]">Navigation</span>
+        </div>
+        <button id="mobileNavClose" class="nav-icon-btn" aria-label="Close Mobile Menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <nav class="mobile-nav-links">
+        <a href="#work" class="mobile-nav-link">
+          <span>01. Selected Work</span>
+          <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
+        </a>
+        <a href="#stack" class="mobile-nav-link">
+          <span>02. The Lab Report</span>
+          <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
+        </a>
+        <a href="#ledger" class="mobile-nav-link">
+          <span>03. Career Ledger</span>
+          <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
+        </a>
+        <a href="#contact" class="mobile-nav-link">
+          <span>04. Submit an Owl</span>
+          <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="pt-4 border-t border-[var(--border-divider)] space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="font-mono text-xs text-[var(--text-muted)]">THEME &bull; MUSIC</span>
+        <div class="flex gap-2">
+          <button id="mobileMusicToggleBtn" class="nav-icon-btn" aria-label="Music Toggle" title="Hedwig's Theme">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+          </button>
+          <button id="mobileSoundToggleBtn" class="nav-icon-btn" aria-label="Sound Toggle" title="Sound FX">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+          </button>
+          <button id="mobileThemeToggleBtn" class="nav-icon-btn" aria-label="Theme Toggle" title="Theme">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          </button>
+        </div>
+      </div>
+      <a href="#contact" class="btn-ink w-full text-center">SEND DISPATCH &rarr;</a>
+    </div>
+  </aside>
+
+  <!-- LIVE BREAKING NEWS TELEGRAM TAPE TICKER -->
+  <div class="ticker-tape-container" aria-label="Live Breaking News Ticker">
+    <div class="ticker-label">
+      <span class="ticker-label-dot"></span>
+      <span>TELEGRAM WIRE</span>
+    </div>
+    <div class="ticker-marquee">
+      <div class="ticker-track">
+        <span class="ticker-item"><strong>&bull; DISPATCH:</strong> 79 Mission-Critical defects cleared across Finacle Enterprise Core Banking.</span>
+        <span class="ticker-item"><strong>&bull; SPEED:</strong> Jenkins CI/CD execution times reduced by 75% via layer caching &amp; test sharding.</span>
+        <span class="ticker-item"><strong>&bull; PUBLICATION:</strong> Peer-reviewed behavioral gait tracking research paper indexed in IJRPR.</span>
+        <span class="ticker-item"><strong>&bull; ARCHITECTURE:</strong> NestJS high-throughput marketplace engine deployed with zero downtime.</span>
+        <span class="ticker-item"><strong>&bull; STATUS:</strong> Distributed backend desk currently open for high-impact contracts in 2026.</span>
+        <!-- Duplicate for continuous loop -->
+        <span class="ticker-item"><strong>&bull; DISPATCH:</strong> 79 Mission-Critical defects cleared across Finacle Enterprise Core Banking.</span>
+        <span class="ticker-item"><strong>&bull; SPEED:</strong> Jenkins CI/CD execution times reduced by 75% via layer caching &amp; test sharding.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTER BROADSHEET NEWSPAPER CONTAINER -->
+  <main class="broadsheet-wrapper">
+
+    <!-- 1. TOP MASTHEAD (HERALDIC CREST & VINTAGE TITLE) -->
+    <header class="prophet-header">
+      
+      <!-- Micro Header -->
+      <div class="prophet-micro-header">
+        <span>VOL. XXIV &bull; NO. 85248</span>
+        <span id="liveIssueDate" class="font-serif italic text-xs text-[var(--text-ink)]">Bangalore &bull; Thursday Edition</span>
+        <span>PRICE: 7 SICKLES</span>
+      </div>
+
+      <!-- Giant Broadsheet Masthead -->
+      <div class="prophet-masthead-box">
+        <!-- Winged Emblem Left -->
+        <div class="prophet-crest">
+          <span class="prophet-crest-title">RB</span>
+          <span class="prophet-crest-subtitle">EST. 2021</span>
+        </div>
+
+        <h1 class="prophet-masthead-title">DAILY CHRONICLE</h1>
+
+        <!-- Winged Emblem Right -->
+        <div class="prophet-crest">
+          <span class="prophet-crest-title">RB</span>
+          <span class="prophet-crest-subtitle">VERIFIED</span>
+        </div>
+      </div>
+
+      <!-- Sub-Masthead Banner -->
+      <div class="prophet-sub-banner">
+        &starf; THE RECORD OF A SOFTWARE ENGINEER &bull; ENTERPRISE SYSTEMS &starf;
+      </div>
+
+      <!-- Top 4-Ear Information Grid -->
+      <div class="top-ear-grid">
+        <!-- Ear 1: Reward / Enterprise Core -->
+        <div class="top-ear-cell text-left">
+          <div class="ear-title highlight">100,000 GALLONS // REWARD</div>
+          <div class="text-[10px] text-[var(--text-muted)] font-sans">
+            79 Mission-Critical defects resolved on Finacle Enterprise Core Banking.
+          </div>
+        </div>
+
+        <!-- Ear 2: National Weather & Concurrency -->
+        <div class="top-ear-cell text-left">
+          <div class="ear-title">NATIONAL WEATHER</div>
+          <div class="text-[10px] space-y-0.5 text-[var(--text-muted)]">
+            <div class="flex justify-between"><span>Bangalore Desk:</span> <span id="weatherTemp" class="font-bold text-[var(--text-ink)]">24&deg;C High Concurrency</span></div>
+            <div class="flex justify-between"><span>Microservices:</span> <span id="concurrencyStatus" class="font-bold text-emerald-700">Operational 99.99%</span></div>
+          </div>
+        </div>
+
+        <!-- Ear 3: Zodiac Aspects -->
+        <div class="top-ear-cell text-left">
+          <div class="ear-title">ZODIAC &bull; ASPECTS</div>
+          <div class="text-[10px] text-[var(--text-muted)]">
+            Java 17 &amp; Spring Boot 3 in Apex. PostgreSQL in Ascendance. Zero-Trust RBAC sealed.
+          </div>
+        </div>
+
+        <!-- Ear 4: Late-Night Edition -->
+        <div class="top-ear-cell text-left">
+          <div class="ear-title">FIRST-SECOND EDITION</div>
+          <div class="text-[10px] text-[var(--text-muted)]">
+            Special Investigation &bull; Lead Architect Observed at EdgeVerve (Infosys).
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. MAIN CENTERPIECE STORY (WITH MOVING USER PHOTO) -->
+    <section class="hero-section">
+      
+      <!-- Headline Across Top -->
+      <h2 class="hero-headline">
+        ENTERPRISE SCALE CONTINUES
+      </h2>
+
+      <!-- 3-Column Centerpiece Layout -->
+      <div class="main-story-grid">
+        
+        <!-- Left Column: Story Part 1 & Sub-Headline -->
+        <div class="space-y-4">
+          <div class="story-col-header text-[#9e1d1d]">
+            &bull; EXCLUSIVE DISPATCH
+          </div>
+          
+          <div class="linotype-column">
+            <span class="ornate-drop-box">N</span>
+            <strong class="font-serif font-bold">EW RECORD:</strong> The subject <strong>Rishi Bhardvaj</strong> was observed engineering mission-critical core banking modules at EdgeVerve (Infosys). Reports confirm active development across Limits, Collaterals, and Covenant compliance engines.
+          </div>
+
+          <div class="linotype-column">
+            The subject implemented configurable maker-checker dual-authorization pipelines, preventing unauthorized mutations on live financial systems.
+          </div>
+
+          <div class="pt-3 border-t-2 border-[var(--border-ink)]">
+            <h3 class="story-sub-headline">
+              DARK DEFECTS GROW ZERO IN NUMBER
+            </h3>
+            <div class="linotype-column">
+              <span class="ornate-drop-box">S</span>
+              <strong class="font-serif font-bold">YSTEMATIC AUDITS:</strong> Confirmed 79 mission-critical enterprise production defects identified and eradicated while shipping 40+ client-ready features to financial institutions worldwide.
+            </div>
+            <div class="text-right font-mono text-[9px] text-[#766953] pt-1">&mdash; PAGES 3 / 8</div>
+          </div>
+        </div>
+
+        <!-- Center Column: Framed Moving Portrait of Rishi -->
+        <div class="prophet-photo-container">
+          <div class="prophet-photo-frame">
+            <img 
+              src="assets/images/rishi_vintage_photo.png" 
+              alt="Rishi Bhardvaj - Enterprise Software Engineer" 
+              class="prophet-user-img"
+            />
+            <div class="magical-grain-overlay"></div>
+            
+            <!-- Overlay Caption Banner -->
+            <div class="prophet-photo-caption">
+              <div class="photo-caption-title">
+                RISHI BHARDVAJ
+              </div>
+              <div class="photo-caption-sub">
+                LEAD BACKEND ARCHITECT &bull; EDGEVERVE (INFOSYS)
+              </div>
+            </div>
+          </div>
+          
+          <div class="w-full text-center mt-2">
+            <span class="stamp-distressed text-xs">79 DEFECTS RESOLVED &bull; VERIFIED</span>
+          </div>
+
+          <!-- Interactive Photo Filter Mode Switcher -->
+          <div class="photo-filter-controls" aria-label="Photo Filter Mode">
+            <button class="photo-filter-btn active" data-filter="default">Broadsheet</button>
+            <button class="photo-filter-btn" data-filter="linotype">Linotype</button>
+            <button class="photo-filter-btn" data-filter="daguerreotype">Vintage</button>
+            <button class="photo-filter-btn" data-filter="amber">Amber</button>
+          </div>
+        </div>
+
+        <!-- Right Column: Story Part 2 & Sub-Headline -->
+        <div class="space-y-4">
+          <div class="story-col-header text-[var(--text-ink)]">
+            &bull; ARCHITECTURAL ANALYSIS
+          </div>
+
+          <div class="linotype-column">
+            <span class="ornate-drop-box">E</span>
+            <strong class="font-serif font-bold">XAMINATION SHOWS</strong> an extensive technology arsenal: Java 17, Spring Boot 3, TypeScript, NestJS, PostgreSQL, Oracle DB, and Docker infrastructure. Production environments report zero downtime.
+          </div>
+
+          <div class="linotype-column">
+            Multi-tenant identity vaults incorporating OAuth2, JWT token rotation, and strict RBAC policies guard financial assets against breach attempts.
+          </div>
+
+          <div class="pt-3 border-t-2 border-[var(--border-ink)]">
+            <h3 class="story-sub-headline">
+              WHERE DO WE GET ARCHITECTS NOW?
+            </h3>
+            <div class="linotype-column">
+              <span class="ornate-drop-box">B</span>
+              <strong class="font-serif font-bold">ANGALORE DESK:</strong> The engineering desk remains open for select high-impact distributed systems, enterprise backend contracts, and consulting.
+            </div>
+            <div class="text-right font-mono text-[9px] text-[#766953] pt-1">&mdash; FULL REPORT PAGE 5</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. LOWER MULTI-ARTICLE BROADSHEET GRID -->
+    <section id="work" class="work-section">
+      
+      <!-- Section Category Filter Tabs -->
+      <div class="filter-tabs-container">
+        <div>
+          <span class="font-mono text-[10px] font-bold text-[var(--stamp-red)] uppercase tracking-wider block">DISPATCH ARCHIVE</span>
+          <h3 class="font-headline font-bold text-2xl text-[var(--text-ink)]">Investigative Case Files</h3>
+        </div>
+        <div class="filter-tabs-list">
+          <button class="filter-tab-btn active" data-category="all">All Dispatches</button>
+          <button class="filter-tab-btn" data-category="banking">Core Banking</button>
+          <button class="filter-tab-btn" data-category="cloud">Full-Stack &amp; Cloud</button>
+          <button class="filter-tab-btn" data-category="devops">DevOps &amp; Speed</button>
+          <button class="filter-tab-btn" data-category="research">Research</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Sub-Articles Grid -->
+      <div id="articlesGrid" class="sub-articles-grid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- 4. SECTION: THE LAB REPORT (FORENSICS / STACK TABLE) -->
+    <section id="stack" class="pt-6 pb-10 border-t-2 border-[var(--border-ink)]">
+      <div class="broadsheet-section-header">
+        <div class="broadsheet-subhead">
+          <span>FORENSICS DISCLOSURE</span>
+          <span id="skillCountBadge">11 SUBSTANCES DETECTED</span>
+        </div>
+        <h2 class="broadsheet-title">The Lab Report</h2>
+        <div class="broadsheet-rule"></div>
+      </div>
+
+      <!-- Interactive Search & Category Filter Controls -->
+      <div class="lab-controls-bar">
+        <div class="lab-search-box">
+          <svg class="w-4 h-4 text-[var(--text-subtle)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input 
+            type="text" 
+            id="skillSearchInput" 
+            placeholder="Search spells, substances, tools..." 
+            class="lab-search-input"
+          />
+        </div>
+        <div class="lab-category-pills">
+          <button class="lab-pill-btn active" data-category="all">All Substances</button>
+          <button class="lab-pill-btn" data-category="backend">Backend</button>
+          <button class="lab-pill-btn" data-category="database">Databases</button>
+          <button class="lab-pill-btn" data-category="devops">Cloud &amp; DevOps</button>
+          <button class="lab-pill-btn" data-category="security">Security</button>
+          <button class="lab-pill-btn" data-category="ui">UI &amp; Full-Stack</button>
+        </div>
+      </div>
+
+      <!-- Forensics Table for Desktop / Tablet -->
+      <div class="forensics-table-container">
+        <table class="forensics-table">
+          <thead>
+            <tr>
+              <th style="width: 40%;">SUBSTANCE / SPELL</th>
+              <th style="width: 15%;">CODE</th>
+              <th style="width: 25%;">DETECTED</th>
+              <th style="width: 20%; text-align: right;">FINDING</th>
+            </tr>
+          </thead>
+          <tbody id="forensicsTableBody">
+            <!-- Dynamically injected -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Forensics Cards for Mobile Devices -->
+      <div id="forensicsMobileCards" class="forensics-cards-grid">
+        <!-- Dynamically injected -->
+      </div>
+
+      <div class="mt-3 text-right font-mono text-[11px] text-[#766953]">
+        Findings are illustrative &mdash; technical substances detected across active engineering duty.
+      </div>
+    </section>
+
+    <!-- 5. SECTION: THE CAREER LEDGER (KNOWN WHEREABOUTS) -->
+    <section id="ledger" class="ledger-section pt-6 pb-10 border-t-2 border-[var(--border-ink)]">
+      <div class="broadsheet-section-header">
+        <div class="broadsheet-subhead">
+          <span>KNOWN WHEREABOUTS</span>
+          <span>MOVEMENTS ON RECORD SINCE 2021</span>
+        </div>
+        <h2 class="broadsheet-title">The Career Ledger</h2>
+        <div class="broadsheet-rule"></div>
+      </div>
+
+      <div class="ledger-timeline">
+        <!-- Ledger Entry 1 -->
+        <div class="ledger-row">
+          <div class="ledger-period">
+            <span>Aug 2025 &mdash; Now</span>
+          </div>
+          <div class="ledger-role-box">
+            <h3 class="ledger-role-title">Software Engineer</h3>
+            <div class="ledger-company">EDGEVERVE SYSTEMS (INFOSYS)</div>
+          </div>
+          <div>
+            <p class="ledger-desc">
+              Observed daily, building enterprise banking platform engines &mdash; limits, collaterals, covenants, and maker-checker approval workflows. Resolving 79 mission-critical production defects and delivering 40+ client-ready features across core banking services.
+            </p>
+            <div class="ledger-badge-list">
+              <span class="stamp-badge">Java 17</span>
+              <span class="stamp-badge">Spring Boot 3</span>
+              <span class="stamp-badge">Oracle PL/SQL</span>
+              <span class="stamp-badge">Finacle FNPR</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ledger Entry 2 -->
+        <div class="ledger-row">
+          <div class="ledger-period">
+            <span>2024 &mdash; 2025</span>
+          </div>
+          <div class="ledger-role-box">
+            <h3 class="ledger-role-title">Backend Architect</h3>
+            <div class="ledger-company">EVENTGO PLATFORM</div>
+          </div>
+          <div>
+            <p class="ledger-desc">
+              Designed high-throughput NestJS marketplace architecture with Prisma ORM and PostgreSQL. Shipped 25 REST APIs, automated Swagger documentation, role-based JWT authentication, and webhook payment integrations.
+            </p>
+            <div class="ledger-badge-list">
+              <span class="stamp-badge">NestJS</span>
+              <span class="stamp-badge">TypeScript</span>
+              <span class="stamp-badge">Prisma ORM</span>
+              <span class="stamp-badge">PostgreSQL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ledger Entry 3 -->
+        <div class="ledger-row">
+          <div class="ledger-period">
+            <span>2024 &mdash; 2025</span>
+          </div>
+          <div class="ledger-role-box">
+            <h3 class="ledger-role-title">Published Researcher</h3>
+            <div class="ledger-company">IJRPR JOURNAL (RESEARCH)</div>
+          </div>
+          <div>
+            <p class="ledger-desc">
+              Authored peer-reviewed research paper titled &ldquo;Gait Analysis of Human Behaviour&rdquo; in the International Journal of Research Publication and Reviews (IJRPR), developing non-intrusive vision and accelerometer gait tracking models.
+            </p>
+            <div class="ledger-badge-list">
+              <span class="stamp-badge">Python</span>
+              <span class="stamp-badge">Computer Vision</span>
+              <span class="stamp-badge">OpenCV</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ledger Entry 4 -->
+        <div class="ledger-row">
+          <div class="ledger-period">
+            <span>2021 &mdash; 2025</span>
+          </div>
+          <div class="ledger-role-box">
+            <h3 class="ledger-role-title">B.E. Computer Science</h3>
+            <div class="ledger-company">DAYANANDA SAGAR ACADEMY (DSATM)</div>
+          </div>
+          <div>
+            <p class="ledger-desc">
+              First recorded appearance. Led intern teams of 8 developers, earned Runner-Up in Enterprise Products Hackathon, 2nd Runner-Up in Hackzion National Level Hackathon, and contributed to open source repositories.
+            </p>
+            <div class="ledger-badge-list">
+              <span class="stamp-badge">Algorithms</span>
+              <span class="stamp-badge">Distributed Systems</span>
+              <span class="stamp-badge">Hackathons</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. SECTION: LETTERS & COMMISSIONS (SUBMIT AN OWL) -->
+    <section id="contact" class="contact-section pt-6 pb-10 border-t-2 border-[var(--border-ink)]">
+      <div class="broadsheet-section-header">
+        <div class="broadsheet-subhead">
+          <span>SUBMIT AN OWL // DISPATCH</span>
+          <span>THE DESK IS OPEN FOR SELECT WORK &mdash; 2026</span>
+        </div>
+        <h2 class="broadsheet-title">Letters &amp; Commissions</h2>
+        <div class="broadsheet-rule"></div>
+      </div>
+
+      <!-- 2-Column Dossier Card -->
+      <div class="contact-dossier-box">
+        
+        <!-- Left Column: Form -->
+        <div class="contact-form-pane">
+          <div>
+            <h3 class="font-headline text-2xl sm:text-3xl text-[var(--text-ink)] font-bold mb-2">Put it in writing</h3>
+            <p class="font-sans text-sm text-[var(--text-muted)] mb-5">
+              A project in mind, a role to fill, or just a good question &mdash; send it through and he&rsquo;ll get back to you.
+            </p>
+
+            <form id="contactForm" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="dossier-input-label">YOUR NAME</label>
+                  <input type="text" id="formName" name="name" required placeholder="Harry Potter" class="dossier-input" />
+                </div>
+                <div>
+                  <label class="dossier-input-label">EMAIL</label>
+                  <input type="email" id="formEmail" name="email" required placeholder="harry@hogwarts.edu" class="dossier-input" />
+                </div>
+              </div>
+
+              <div>
+                <label class="dossier-input-label">SUBJECT</label>
+                <input type="text" id="formSubject" name="subject" required placeholder="A new distributed architecture, banking core, contract..." class="dossier-input" />
+              </div>
+
+              <div>
+                <label class="dossier-input-label">THE STORY</label>
+                <textarea id="formStory" name="message" required rows="4" maxlength="1000" placeholder="Tell him what you're building." class="dossier-input resize-none"></textarea>
+                <div id="charCount" class="char-counter">0 / 1000 characters</div>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border-divider)]">
+                <span class="font-mono text-[10px] text-[#766953] uppercase tracking-wider">USUALLY REPLIES WITHIN 24 HOURS</span>
+                <button type="submit" class="btn-ink">SEND THE OWL &rarr;</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column: Direct Line & Desk Details -->
+        <div class="contact-desk-pane">
+          <div class="space-y-5">
+            <!-- Direct Line with Copy Button -->
+            <div>
+              <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-1">DIRECT LINE</span>
+              <div class="flex items-center flex-wrap gap-2">
+                <a href="mailto:bhardvajrishi@gmail.com" class="font-mono text-sm sm:text-base font-bold text-[var(--text-ink)] hover:underline">
+                  bhardvajrishi@gmail.com
+                </a>
+                <button class="copy-pill-btn" data-copy="bhardvajrishi@gmail.com" title="Copy Email">
+                  COPY
+                </button>
+              </div>
+              <p class="font-sans text-xs text-[var(--text-muted)] leading-relaxed mt-1">
+                For commissions, contracts, and the occasional good argument about system architecture &amp; backend scalability.
+              </p>
+            </div>
+
+            <div class="border-t border-[var(--border-divider)]"></div>
+
+            <!-- The Desk -->
+            <div>
+              <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-1">THE DESK</span>
+              <div class="font-serif text-lg text-[var(--text-ink)] font-bold mb-0.5">Bangalore, India</div>
+              <p class="font-mono text-xs text-[var(--text-muted)]">
+                IST &bull; working with teams worldwide, remote-first.
+              </p>
+            </div>
+
+            <div class="border-t border-[var(--border-divider)]"></div>
+
+            <!-- Phone Direct -->
+            <div>
+              <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-1">TELEGRAPH LINE</span>
+              <div class="flex items-center flex-wrap gap-2">
+                <a href="tel:+917488962502" class="font-mono text-sm font-bold text-[var(--text-ink)] hover:underline">
+                  +91-7488962502
+                </a>
+                <button class="copy-pill-btn" data-copy="+917488962502" title="Copy Phone">
+                  COPY
+                </button>
+              </div>
+            </div>
+
+            <div class="border-t border-[var(--border-divider)]"></div>
+
+            <!-- Availability -->
+            <div>
+              <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)] block mb-1">AVAILABILITY</span>
+              <div class="font-serif text-base font-bold text-[var(--text-ink)] mb-0.5">Full-time &amp; select contracts</div>
+              <p class="font-sans text-xs text-[var(--text-muted)] leading-relaxed">
+                Working full-time at EdgeVerve (Infosys), open to select high-impact enterprise architecture, distributed backend, or consulting contracts.
+              </p>
+            </div>
+          </div>
+
+          <!-- Social Icon Grid -->
+          <div class="pt-5 border-t border-[var(--border-divider)] flex items-center gap-3">
+            <a href="https://github.com/rishibhardvaj" target="_blank" rel="noopener" aria-label="GitHub" class="icon-box" title="GitHub">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            </a>
+            <a href="https://linkedin.com/in/rishibhardvaj" target="_blank" rel="noopener" aria-label="LinkedIn" class="icon-box" title="LinkedIn">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+            <a href="mailto:bhardvajrishi@gmail.com" aria-label="Email" class="icon-box" title="Email">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 7. BOTTOM BROADSHEET INDEX BAR -->
+    <div class="prophet-bottom-index my-4">
+      <span>Banking Core <em>3</em></span>
+      <span>Deployments <em>7</em></span>
+      <span>Stack &amp; Potions <em>6</em></span>
+      <span>Ministry Affairs <em>9</em></span>
+      <span>Dispatch Desk <em>12</em></span>
+    </div>
+
+  </main>
+
+  <!-- 8. MASTER DARK FOOTER -->
+  <footer class="prophet-footer">
+    <div class="footer-inner">
+      
+      <!-- Giant Masthead Name -->
+      <div class="footer-masthead-title">
+        Rishi Bhardvaj
+      </div>
+
+      <div class="footer-grid">
+        
+        <!-- Column 1: Bio Deck -->
+        <div class="space-y-3">
+          <p class="font-sans text-sm text-[#b09e75] leading-relaxed font-light">
+            A software engineer in Bangalore, India. Building robust distributed banking backends at EdgeVerve (Infosys) and engineering high-throughput architectures. This broadsheet is hand-set in Pirata One, Playfair Display, and Space Mono.
+          </p>
+        </div>
+
+        <!-- Column 2: Sections -->
+        <div>
+          <span class="footer-heading">SECTIONS</span>
+          <ul class="footer-links-list">
+            <li><a href="#work">Selected Works &nearr;</a></li>
+            <li><a href="#stack">The Stack &nearr;</a></li>
+            <li><a href="#ledger">The Ledger &nearr;</a></li>
+            <li><a href="#contact">Contact &nearr;</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: The Desk -->
+        <div>
+          <span class="footer-heading">THE DESK</span>
+          <div class="font-sans text-sm text-[var(--footer-text)] space-y-1">
+            <div>Bangalore, India</div>
+            <div class="text-[#b09e75] font-mono text-xs">IST &bull; Remote-first</div>
+            <div><a href="mailto:bhardvajrishi@gmail.com" class="hover:underline text-white">bhardvajrishi@gmail.com</a></div>
+          </div>
+        </div>
+
+        <!-- Column 4: Wire Services -->
+        <div>
+          <span class="footer-heading">WIRE SERVICES</span>
+          <ul class="footer-links-list">
+            <li><a href="https://github.com/rishibhardvaj" target="_blank" rel="noopener">GitHub &nearr;</a></li>
+            <li><a href="https://linkedin.com/in/rishibhardvaj" target="_blank" rel="noopener">LinkedIn &nearr;</a></li>
+            <li><a href="tel:+917488962502">+91-7488962502</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Distressed CASE CLOSED Red Rubber Stamp Area -->
+      <div class="py-6 text-center">
+        <div class="stamp-distressed-footer">
+          CASE CLOSED &bull; EDITION VERIFIED
+        </div>
+      </div>
+
+      <!-- Copyright & Social Bar -->
+      <div class="footer-bottom-bar">
+        <div>
+          &copy; 2026 THE BROADSHEET RECORD &bull; RISHI BHARDEVAJ &bull; ALL RIGHTS RESERVED
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="https://github.com/rishibhardvaj" target="_blank" rel="noopener" aria-label="GitHub" class="icon-box-dark" title="GitHub">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/rishibhardvaj" target="_blank" rel="noopener" aria-label="LinkedIn" class="icon-box-dark" title="LinkedIn">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="mailto:bhardvajrishi@gmail.com" aria-label="Contact" class="icon-box-dark" title="Email">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- INTERACTIVE CASE DOSSIER MODAL -->
+  <div id="caseModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dossier" onclick="event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <div id="modalExhibit" class="font-mono text-xs text-[#e04545] font-bold tracking-widest uppercase">EXHIBIT REPORT</div>
+          <h3 id="modalTitle" class="font-headline text-2xl md:text-3xl text-white font-bold">Case Dossier</h3>
+        </div>
+        <button id="modalCloseBtn" class="modal-close-btn" aria-label="Close modal">
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="modal-meta-row">
+          <span id="modalDomain">TARGET: DOMAIN.COM</span>
+          <span id="modalTimeline">TIMELINE: 2025</span>
+        </div>
+
+        <div class="space-y-1">
+          <h4 class="font-mono text-xs font-bold text-[var(--text-ink)] uppercase tracking-wider">INVESTIGATIVE BRIEF</h4>
+          <p id="modalDescription" class="font-sans text-sm text-[var(--text-ink)] leading-relaxed">
+            Detailed investigation brief...
+          </p>
+        </div>
+
+        <div class="space-y-1.5">
+          <h4 class="font-mono text-xs font-bold text-[var(--text-ink)] uppercase tracking-wider">TECHNICAL SPECIFICATIONS</h4>
+          <div id="modalTechStack" class="flex flex-wrap gap-1.5">
+            <!-- Badges injected dynamically -->
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <h4 class="font-mono text-xs font-bold text-[var(--text-ink)] uppercase tracking-wider">KEY METRICS &amp; IMPACT</h4>
+          <ul id="modalMetrics" class="space-y-1 font-sans text-sm text-[var(--text-ink)] list-disc list-inside">
+            <!-- Injected dynamically -->
+          </ul>
+        </div>
+
+        <div class="pt-3 border-t border-[var(--border-divider)] flex justify-end">
+          <button id="modalBottomCloseBtn" class="btn-ink">
+            CLOSE DOSSIER
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main JavaScript App (Works seamlessly both locally on file:/// and via web servers) -->
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

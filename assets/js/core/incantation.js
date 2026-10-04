@@ -1,10 +1,12 @@
 /**
  * Incantation Labels
- * A tiny pool of floating spell words ("LUMOS", "ALOHOMORA"...) that appear at the cursor / tap point.
+ * Speaks spells aloud when Sound is on; otherwise shows a tiny pool of floating spell words ("LUMOS", "ALOHOMORA"...) that appear at the cursor / tap point.
  * Pool + Web Animations API: no DOM churn, works with reduced motion (fades in place) and on touch screens.
  */
 
 import { prefersReducedMotion } from './motion.js';
+import { isSoundActive } from './audio.js';
+import { speakSpell } from './voice.js';
 
 const POOL = 4;
 let nodes = [];
@@ -41,6 +43,8 @@ export function trackPointer() {
  * @param {{x?: number, y?: number}} [at] defaults to the last pointer position
  */
 export function castLabel(text, at) {
+  // With sound on, the spell is spoken aloud (no text). With sound off it appears as a brief written label.
+  if (isSoundActive() && speakSpell(String(text))) return;
   ensurePool();
   bindPointer();
   const el = nodes[cursor++ % POOL];

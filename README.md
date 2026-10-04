@@ -234,3 +234,5 @@ Then visit `http://localhost:8000` (or the URL printed by your server) in any mo
 - **Spoken spells**: `assets/js/data/incantations.js` maps actions to spell words (LUMOS/NOX for theme, SONORUS/SILENCIO for sound, ALOHOMORA for opening things, and so on). Add `data-incant="WORD"` to any element to override.
 - **Fonts**: MedievalSharp (headings), EB Garamond (body), Space Mono (tiny technical labels only).
 - **Freelance projects**: three demo client stations (Storefront Forge, Clinic Compass, Ledgerly) sit beside the enterprise work in `data/projects.js`. They are marked `isDemo`: replace them with real client work. Station numbers are generated from order, never typed by hand.
+
+- **Spell voice**: with Sound on, each spell is spoken aloud (British speech voice, correct pronunciations in `core/voice.js`); with Sound off it shows a small written label. To use your own recordings, add `assets/audio/spells/<spell>.mp3` (e.g. `lumos.mp3`) and uncomment the `spell-audio` meta tag.

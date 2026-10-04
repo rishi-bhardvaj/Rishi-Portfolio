@@ -1,0 +1,9 @@
+{
+  "name": "rishi-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Wizarding Railway - Interactive Portfolio for Rishi",
+  "scripts": {
+    "dev": "npx serve ."
+  }
+}

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <defs>
+    <linearGradient id="visBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#081411"/>
+      <stop offset="100%" stop-color="#10251f"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="380" rx="8" fill="url(#visBg)" stroke="#10b981" stroke-width="2"/>
+  <rect width="600" height="34" rx="8" fill="#0d1e19" stroke="#184337" stroke-width="1"/>
+  <circle cx="20" cy="17" r="4.5" fill="#ef4444"/>
+  <circle cx="36" cy="17" r="4.5" fill="#eab308"/>
+  <circle cx="52" cy="17" r="4.5" fill="#22c55e"/>
+  <text x="80" y="22" font-family="'Space Mono', monospace" font-size="11" fill="#34d399" font-weight="bold">VISION LAB // KINEMATIC GAIT MODELING (IJRPR)</text>
+  <text x="580" y="22" font-family="'Space Mono', monospace" font-size="10" fill="#10b981" text-anchor="end">ACCURACY: 96.2%</text>
+
+  <!-- Kinematic motion wave & joint skeleton -->
+  <g transform="translate(40, 55)">
+    <!-- Video Contour Viewport -->
+    <rect x="0" y="20" width="220" height="130" rx="6" fill="#071713" stroke="#059669" stroke-width="1.5"/>
+    <text x="15" y="38" font-family="'Space Mono', monospace" font-size="9" fill="#6ee7b7">OPTICAL FLOW // OPENCV</text>
+    
+    <!-- Stylized stick silhouette skeleton -->
+    <circle cx="110" cy="55" r="7" fill="none" stroke="#34d399" stroke-width="2"/>
+    <line x1="110" y1="62" x2="110" y2="95" stroke="#34d399" stroke-width="2"/>
+    <line x1="110" y1="72" x2="90" y2="85" stroke="#34d399" stroke-width="1.5"/>
+    <line x1="110" y1="72" x2="130" y2="85" stroke="#34d399" stroke-width="1.5"/>
+    <line x1="110" y1="95" x2="95" y2="135" stroke="#34d399" stroke-width="2"/>
+    <line x1="110" y1="95" x2="125" y2="135" stroke="#34d399" stroke-width="2"/>
+    <circle cx="95" cy="135" r="3" fill="#fbbf24"/>
+    <circle cx="125" cy="135" r="3" fill="#fbbf24"/>
+
+    <!-- Kinematic Wave Graph -->
+    <rect x="240" y="20" width="280" height="130" rx="6" fill="#071713" stroke="#059669" stroke-width="1.5"/>
+    <text x="255" y="38" font-family="'Space Mono', monospace" font-size="9" fill="#6ee7b7">KINEMATIC CADENCE VECTOR</text>
+    
+    <path d="M 255 100 Q 285 45, 315 100 T 375 100 T 435 100 T 495 100" fill="none" stroke="#10b981" stroke-width="2"/>
+    <path d="M 255 100 Q 285 130, 315 100 T 375 100 T 435 100 T 495 100" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <circle cx="315" cy="100" r="3" fill="#10b981"/>
+    <circle cx="375" cy="100" r="3" fill="#10b981"/>
+    <circle cx="435" cy="100" r="3" fill="#10b981"/>
+    <text x="255" y="135" font-family="'Space Mono', monospace" font-size="8" fill="#a7f3d0">Step Cadence Normalization: Delta &lt; 33ms</text>
+  </g>
+
+  <!-- Output log box -->
+  <g transform="translate(40, 220)">
+    <rect width="520" height="115" rx="6" fill="#050e0c" stroke="#113e33" stroke-width="1"/>
+    <text x="20" y="28" font-family="'Space Mono', monospace" font-size="10" fill="#34d399">&gt; PEER-REVIEWED PUBLICATION: Indexed in IJRPR (2025)</text>
+    <text x="20" y="52" font-family="'Space Mono', monospace" font-size="9" fill="#d1fae5">&gt; EXTRACTION: Ambient video feed normalized against perspective warp</text>
+    <text x="20" y="74" font-family="'Space Mono', monospace" font-size="9" fill="#d1fae5">&gt; BIOMETRIC MODEL: Non-intrusive gait pattern classification at 96.2%</text>
+    <text x="20" y="96" font-family="'Space Mono', monospace" font-size="9" fill="#34d399">&gt; SENSORS: 0% intrusive wearable hardware required</text>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="600" height="380">
+  <defs>
+    <linearGradient id="rishBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#120b1c"/>
+      <stop offset="100%" stop-color="#221235"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="380" rx="8" fill="url(#rishBg)" stroke="#a855f7" stroke-width="2"/>
+  <rect width="600" height="34" rx="8" fill="#180e26" stroke="#3b1d5c" stroke-width="1"/>
+  <circle cx="20" cy="17" r="4.5" fill="#ef4444"/>
+  <circle cx="36" cy="17" r="4.5" fill="#eab308"/>
+  <circle cx="52" cy="17" r="4.5" fill="#22c55e"/>
+  <text x="80" y="22" font-family="'Space Mono', monospace" font-size="11" fill="#c084fc" font-weight="bold">RISHEESH // AUTONOMOUS JOB INTELLIGENCE ENGINE</text>
+  <text x="580" y="22" font-family="'Space Mono', monospace" font-size="10" fill="#a855f7" text-anchor="end">AUTOMATION: 95%</text>
+
+  <g transform="translate(40, 60)">
+    <!-- Stage 1 -->
+    <rect x="0" y="30" width="120" height="75" rx="5" fill="#24143a" stroke="#a855f7" stroke-width="1.5"/>
+    <text x="60" y="58" font-family="'Space Mono', monospace" font-size="10" fill="#f0abfc" text-anchor="middle" font-weight="bold">CRAWLER MATRIX</text>
+    <text x="60" y="76" font-family="sans-serif" font-size="9" fill="#e9d5ff" text-anchor="middle">50,000+ Postings</text>
+    <text x="60" y="90" font-family="sans-serif" font-size="8" fill="#34d399" text-anchor="middle">24/7 Anti-Block Sync</text>
+
+    <!-- Arrow 1 -->
+    <line x1="120" y1="67" x2="165" y2="67" stroke="#c084fc" stroke-width="2"/>
+    <polygon points="165,63 173,67 165,71" fill="#c084fc"/>
+
+    <!-- Stage 2 -->
+    <rect x="175" y="20" width="160" height="95" rx="5" fill="#351a54" stroke="#e879f9" stroke-width="2"/>
+    <text x="255" y="45" font-family="'Space Mono', monospace" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="bold">SEMANTIC NLP PARSER</text>
+    <text x="255" y="65" font-family="sans-serif" font-size="9" fill="#f5d0fe" text-anchor="middle">Tech Vector Extraction</text>
+    <text x="255" y="80" font-family="sans-serif" font-size="9" fill="#d8b4fe" text-anchor="middle">Signal-to-Noise Filter</text>
+    <text x="255" y="95" font-family="sans-serif" font-size="8" fill="#a855f7" text-anchor="middle">Heuristic Score 94%</text>
+
+    <!-- Arrow 2 -->
+    <line x1="335" y1="67" x2="380" y2="67" stroke="#c084fc" stroke-width="2"/>
+    <polygon points="380,63 388,67 380,71" fill="#c084fc"/>
+
+    <!-- Stage 3 -->
+    <rect x="390" y="30" width="130" height="75" rx="5" fill="#24143a" stroke="#a855f7" stroke-width="1.5"/>
+    <text x="455" y="58" font-family="'Space Mono', monospace" font-size="10" fill="#f0abfc" text-anchor="middle" font-weight="bold">DISPATCH DIGEST</text>
+    <text x="455" y="76" font-family="sans-serif" font-size="9" fill="#e9d5ff" text-anchor="middle">Sub-second Queries</text>
+    <text x="455" y="90" font-family="sans-serif" font-size="8" fill="#34d399" text-anchor="middle">Automated Curation</text>
+  </g>
+
+  <g transform="translate(40, 220)">
+    <rect width="520" height="115" rx="6" fill="#0d0814" stroke="#2b1544" stroke-width="1"/>
+    <text x="20" y="28" font-family="'Space Mono', monospace" font-size="10" fill="#c084fc">&gt; INGESTION: 50,000+ career listings parsed across distributed nodes</text>
+    <text x="20" y="50" font-family="'Space Mono', monospace" font-size="9" fill="#f3e8ff">&gt; CLASSIFICATION: Java 17, Spring Boot, Distributed Systems mapped 94%</text>
+    <text x="20" y="70" font-family="'Space Mono', monospace" font-size="9" fill="#f3e8ff">&gt; LATENCY: Heuristic matching executed in 0.4s response time</text>
+    <text x="20" y="92" font-family="'Space Mono', monospace" font-size="9" fill="#34d399">&gt; STATUS: Fully autonomous intelligence loop active</text>
+  </g>
+</svg>

@@ -1,0 +1,548 @@
+/* ==========================================================================
+   THE WIZARDING RAILWAY — SCENE & TRAIN STYLES
+   ========================================================================== */
+
+#work.railway {
+  position: relative;
+  width: 100%;
+  background: #0d090d;
+  color: #f3ebd9;
+  border-top: 3px solid var(--border-ink);
+  border-bottom: 3px solid var(--border-ink);
+  overflow: hidden;
+}
+
+.railway-stage {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 560px;
+  max-height: 1080px;
+  overflow: hidden;
+  background-color: var(--station-sky, #160b12);
+  transition: background-color 0.8s ease;
+}
+
+/* 1. Parallax World Layers */
+.railway-world {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.world-layer {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  background-position: bottom left;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.layer-sky {
+  background: radial-gradient(circle at 75% 25%, rgba(254, 240, 138, 0.15) 0%, transparent 40%),
+              linear-gradient(180deg, var(--station-sky, #1a0b12) 0%, #0d070b 100%);
+  transform: translate3d(calc(var(--world-parallax-x, 0px) * 0.15), 0, 0);
+}
+
+.gothic-spires-silhouette {
+  position: absolute;
+  bottom: 120px;
+  right: 8%;
+  width: 280px;
+  height: 180px;
+  opacity: 0.25;
+  background-image: radial-gradient(ellipse at 50% 100%, #2a1523 0%, transparent 70%);
+  clip-path: polygon(10% 100%, 15% 40%, 20% 100%, 35% 100%, 42% 15%, 50% 100%, 65% 100%, 75% 30%, 82% 100%);
+}
+
+.layer-hills {
+  bottom: 70px;
+  height: 220px;
+  opacity: 0.45;
+  background: radial-gradient(ellipse at 30% 100%, #1e101a 0%, transparent 75%),
+              radial-gradient(ellipse at 80% 100%, #190c15 0%, transparent 65%);
+  transform: translate3d(calc(var(--world-parallax-x, 0px) * 0.35), 0, 0);
+}
+
+.layer-trees {
+  bottom: 60px;
+  height: 160px;
+  opacity: 0.6;
+  background-image: repeating-linear-gradient(90deg, #120810 0px, #120810 8px, transparent 8px, transparent 24px);
+  transform: translate3d(calc(var(--world-parallax-x, 0px) * 0.6), 0, 0);
+}
+
+.world-fog-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 120px;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0.35;
+}
+
+.fog-drift {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(230, 218, 191, 0.2) 60%, rgba(230, 218, 191, 0.35) 100%);
+  animation: fogMotion 24s linear infinite;
+}
+
+.fog-2 {
+  animation: fogMotion 38s linear infinite reverse;
+  opacity: 0.6;
+}
+
+@keyframes fogMotion {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* 2. Platform Architecture & Lanterns */
+.railway-platform-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.platform-arch {
+  position: absolute;
+  top: -120px;
+  left: 40px;
+  pointer-events: auto;
+}
+
+.arch-brass-sign {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 18px;
+  background: #1a120b;
+  border: 2px solid var(--train-brass);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(176, 141, 60, 0.25);
+  border-radius: 4px;
+}
+
+.arch-title {
+  font-family: var(--font-masthead);
+  font-size: 1.4rem;
+  letter-spacing: 0.15em;
+  color: #fef08a;
+}
+
+.arch-sub {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: #b08d3c;
+  letter-spacing: 0.2em;
+}
+
+.arch-stars {
+  font-size: 8px;
+  color: #d4af37;
+}
+
+/* Gas Lanterns with Desynced Flicker */
+.lantern {
+  position: absolute;
+  bottom: 85px;
+  width: 18px;
+  height: 38px;
+}
+
+.lantern-1 { left: 16%; }
+.lantern-2 { left: 52%; }
+.lantern-3 { left: 88%; }
+
+.lantern-cap {
+  width: 18px;
+  height: 8px;
+  background: #24160c;
+  border-top: 1px solid #b08d3c;
+  border-radius: 4px 4px 0 0;
+}
+
+.lantern-glass {
+  position: relative;
+  width: 14px;
+  margin: 0 auto;
+  height: 22px;
+  background: rgba(254, 240, 138, 0.25);
+  border: 1px solid #b08d3c;
+}
+
+.lantern-flame {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  width: 6px;
+  height: 12px;
+  border-radius: 50% 50% 20% 20%;
+  background: #fef08a;
+  box-shadow: 0 0 10px 4px rgba(255, 183, 3, 0.7);
+}
+
+.lantern-1 .lantern-flame { animation: lanternFlicker 2.1s infinite alternate ease-in-out; }
+.lantern-2 .lantern-flame { animation: lanternFlicker 2.9s infinite alternate-reverse ease-in-out 0.4s; }
+.lantern-3 .lantern-flame { animation: lanternFlicker 2.5s infinite alternate ease-in-out 0.8s; }
+
+@keyframes lanternFlicker {
+  0% { opacity: 0.75; transform: scale(0.92); }
+  35% { opacity: 0.95; transform: scale(1.05); }
+  60% { opacity: 0.65; transform: scale(0.88); }
+  85% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 0.8; transform: scale(0.95); }
+}
+
+/* Platform Flagstones & Rails */
+.platform-flagstones {
+  position: absolute;
+  bottom: 45px;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  background: #211a14;
+  border-top: 2px solid #b09e75;
+  border-bottom: 2px solid #140f0c;
+}
+
+.safety-yellow-stripe {
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #d4af37, #d4af37 20px, #1a1208 20px, #1a1208 40px);
+}
+
+.track-bed {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 45px;
+  background: #14100c;
+}
+
+.track-ties {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, #241b14 0px, #241b14 14px, #100c09 14px, #100c09 38px);
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(180deg, #d5c59f 0%, #5c472d 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.rail-top { top: 12px; }
+.rail-bottom { bottom: 12px; }
+
+/* 3. Train Assembly */
+.train-assembly {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 2200px;
+  z-index: 12;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: trainRock 1.8s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+@keyframes trainRock {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-2px) rotate(0.15deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.train-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wheels-rolling .train-wheels circle {
+  animation: wheelRoll 0.45s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes wheelRoll {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Steam Puffs */
+.steam-emitter {
+  position: absolute;
+  top: 10px;
+  right: 180px;
+  width: 100px;
+  height: 80px;
+  pointer-events: none;
+}
+
+.steam-puff {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(253, 251, 247, 0.45) 0%, rgba(232, 220, 190, 0.1) 60%, transparent 100%);
+  opacity: 0;
+  animation: steamRise 3.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.puff-1 { animation-delay: 0s; }
+.puff-2 { animation-delay: 0.5s; left: 10px; }
+.puff-3 { animation-delay: 1.0s; left: -10px; }
+.puff-4 { animation-delay: 1.6s; left: 15px; }
+.puff-5 { animation-delay: 2.2s; left: -5px; }
+.puff-6 { animation-delay: 2.7s; left: 8px; }
+
+@keyframes steamRise {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-120px, -90px) scale(3.5);
+    opacity: 0;
+  }
+}
+
+/* 4. Split Curtain Gates */
+.railway-curtain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  overflow: hidden;
+}
+
+.curtain-gate {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: #140d10;
+  border: 2px solid var(--train-brass);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+  transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+}
+
+.curtain-gate-left {
+  left: 0;
+  justify-content: flex-end;
+  border-right: 3px solid #b08d3c;
+}
+
+.curtain-gate-right {
+  right: 0;
+  justify-content: flex-start;
+  border-left: 3px solid #b08d3c;
+}
+
+.gate-filigree {
+  padding: 40px;
+  opacity: 0.7;
+}
+
+.gate-crest-half {
+  font-family: var(--font-masthead);
+  font-size: 4rem;
+  color: #d4af37;
+}
+
+/* 5. Railway Intro Overlay */
+.railway-intro {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 35;
+  background: rgba(14, 9, 12, 0.75);
+  backdrop-filter: blur(4px);
+  padding: 20px;
+  transition: opacity 0.5s ease;
+}
+
+.railway-intro.departing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-parchment-card {
+  max-width: 520px;
+  width: 100%;
+  background: var(--bg-parchment-light);
+  color: var(--text-ink);
+  border: 2px solid var(--border-ink);
+  box-shadow: var(--shadow-broadsheet), 0 0 35px rgba(212, 175, 55, 0.2);
+  padding: 32px 28px;
+  text-align: center;
+  position: relative;
+}
+
+.intro-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--stamp-red);
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.intro-headline {
+  font-family: var(--font-headline);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px 0;
+  color: var(--text-ink);
+}
+
+.intro-description {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.btn-platform-board {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  background: #6e1423;
+  color: #fef08a;
+  border: 2px solid #b08d3c;
+  font-family: var(--font-headline);
+  font-size: 0.95rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(110, 20, 35, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-platform-board:hover {
+  background: #8a182b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(110, 20, 35, 0.6);
+}
+
+.intro-sub-note {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-subtle);
+  margin-top: 14px;
+}
+
+.intro-sub-note kbd {
+  background: #e6dabf;
+  border: 1px solid #b09e75;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* 6. Railway HUD */
+.railway-hud {
+  position: absolute;
+  bottom: 12px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.hud-controls-left,
+.hud-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.hud-nav-btn {
+  padding: 7px 14px;
+  background: rgba(22, 14, 18, 0.88);
+  color: #fef08a;
+  border: 1px solid #b08d3c;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.hud-nav-btn:hover {
+  background: #6e1423;
+}
+
+.hud-counter {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: bold;
+  color: #d4af37;
+  padding: 6px 12px;
+  background: rgba(18, 12, 15, 0.88);
+  border: 1px solid rgba(176, 141, 60, 0.4);
+  border-radius: 3px;
+}
+
+.hud-chip {
+  padding: 6px 12px;
+  background: rgba(22, 14, 18, 0.88);
+  color: #e6dabf;
+  border: 1px solid #766953;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.hud-chip.active {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.hud-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Reduced Motion Overrides */
+@media (prefers-reduced-motion: reduce) {
+  .train-assembly,
+  .steam-puff,
+  .fog-drift,
+  .lantern-flame,
+  .wheels-rolling .train-wheels circle {
+    animation: none !important;
+  }
+}

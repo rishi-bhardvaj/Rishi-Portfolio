@@ -1,0 +1,110 @@
+/* ==========================================================================
+   WAND SPELL CASTING & LIGHT BURST ANIMATIONS (Lumos / Nox)
+   ========================================================================== */
+
+.wand-spell-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.magic-wand-wrapper {
+  position: absolute;
+  right: -20px;
+  bottom: -40px;
+  width: 300px;
+  height: 300px;
+  pointer-events: none;
+  animation: wandCastSwish 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  transform-origin: 20% 80%;
+}
+
+@keyframes wandCastSwish {
+  0% {
+    transform: rotate(35deg) translate(80px, 80px) scale(0.85);
+    opacity: 0;
+  }
+  35% {
+    transform: rotate(-12deg) translate(-10px, -20px) scale(1.05);
+    opacity: 1;
+  }
+  65% {
+    transform: rotate(4deg) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(25deg) translate(40px, 40px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+.magic-wand-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+}
+
+.spell-light-burst {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(50%, 50%);
+  animation: spellBurstExpansion 0.9s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+.lumos-burst {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(254, 240, 138, 0.6) 30%, rgba(234, 179, 8, 0.2) 65%, transparent 100%);
+  box-shadow: 0 0 100px 40px rgba(250, 204, 21, 0.4);
+}
+
+.nox-burst {
+  background: radial-gradient(circle, rgba(243, 232, 255, 0.9) 0%, rgba(192, 132, 252, 0.5) 30%, rgba(126, 34, 206, 0.25) 65%, transparent 100%);
+  box-shadow: 0 0 100px 40px rgba(168, 85, 247, 0.35);
+}
+
+@keyframes spellBurstExpansion {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(65);
+    opacity: 0;
+  }
+}
+
+.wand-sparkle-star {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkleFly 0.85s cubic-bezier(0.15, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes sparkleFly {
+  0% {
+    transform: translate(0, 0) scale(1.6);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--sx), var(--sy)) scale(0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magic-wand-wrapper,
+  .spell-light-burst,
+  .wand-sparkle-star {
+    animation: none !important;
+    display: none !important;
+  }
+}

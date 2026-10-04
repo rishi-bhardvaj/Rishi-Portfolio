@@ -1,7 +1,12 @@
-// ==========================================================================
-// FLYING BROOM SCROLLBAR COMPONENT
-// Nimbus / Firebolt Broomstick riding the scrollbar with tilt and sparkle trail
-// ==========================================================================
+/**
+ * Flying Broom Scrollbar Component
+ * Nimbus broomstick tracking viewport scroll with dynamic tilt and sparkle trail.
+ */
+
+import { prefersReducedMotion } from '../core/motion.js';
+
+let rafId = null;
+let cleanups = [];
 
 export function initBroom() {
   let track = document.getElementById('flyingBroomTrack');
@@ -13,19 +18,14 @@ export function initBroom() {
       <div class="broom-guide-line"></div>
       <div id="flyingBroom" class="flying-broom-container" title="Nimbus 2000 &bull; Scroll Tracker">
         <svg class="flying-broom-svg" viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Handle Tail -->
           <path d="M20 2 C20 2, 19 20, 19.5 40" stroke="#5c3818" stroke-width="3" stroke-linecap="round"/>
           <path d="M20 2 C20 2, 21 20, 20.5 40" stroke="#36200c" stroke-width="1" stroke-linecap="round"/>
-          <!-- Golden Band Binding -->
           <rect x="16.5" y="38" width="7" height="4" rx="1" fill="#d4af37" stroke="#927114" stroke-width="0.75"/>
           <line x1="16.5" y1="40" x2="23.5" y2="40" stroke="#715408" stroke-width="0.5"/>
-          <!-- Twigs / Bristles -->
           <path d="M19.5 42 C16 48, 12 62, 11 76 C15 78, 25 78, 29 76 C28 62, 24 48, 20.5 42 Z" fill="#8c5828" stroke="#4a280c" stroke-width="1.2"/>
-          <!-- Bristle details -->
           <path d="M15 52 Q13 65 14 75" stroke="#4a280c" stroke-width="0.75" stroke-linecap="round"/>
           <path d="M20 46 Q20 62 20 77" stroke="#4a280c" stroke-width="0.75" stroke-linecap="round"/>
           <path d="M25 52 Q27 65 26 75" stroke="#4a280c" stroke-width="0.75" stroke-linecap="round"/>
-          <!-- Golden Nimbus Inscription -->
           <circle cx="20" cy="18" r="1.5" fill="#f5cf7a"/>
         </svg>
       </div>
@@ -34,6 +34,7 @@ export function initBroom() {
   }
 
   const broomContainer = document.getElementById('flyingBroom');
+  if (!broomContainer) return () => {};
   const broomSvg = broomContainer.querySelector('.flying-broom-svg');
 
   let currentY = 0;
@@ -68,23 +69,25 @@ export function initBroom() {
     scrollVelocity += (speed - scrollVelocity) * 0.25;
     lastScrollY = window.scrollY;
 
-    const targetTilt = Math.max(-28, Math.min(28, scrollVelocity * 0.65));
-    currentTilt += (targetTilt - currentTilt) * 0.2;
+    if (!prefersReducedMotion) {
+      const targetTilt = Math.max(-28, Math.min(28, scrollVelocity * 0.65));
+      currentTilt += (targetTilt - currentTilt) * 0.2;
 
-    if (broomSvg) {
-      broomSvg.style.transform = `rotate(${currentTilt.toFixed(2)}deg)`;
+      if (broomSvg) {
+        broomSvg.style.transform = `rotate(${currentTilt.toFixed(2)}deg)`;
+      }
+
+      const now = performance.now();
+      if (Math.abs(scrollVelocity) > 2 && now - lastSparkleTime > 120) {
+        lastSparkleTime = now;
+        createBroomSparkle(track, currentY);
+      }
     }
 
-    const now = performance.now();
-    if (Math.abs(scrollVelocity) > 2 && now - lastSparkleTime > 120) {
-      lastSparkleTime = now;
-      createBroomSparkle(track, currentY);
-    }
-
-    requestAnimationFrame(updateBroomPosition);
+    rafId = requestAnimationFrame(updateBroomPosition);
   }
 
-  requestAnimationFrame(updateBroomPosition);
+  rafId = requestAnimationFrame(updateBroomPosition);
 
   function createBroomSparkle(parentTrack, broomY) {
     const sparkle = document.createElement('div');
@@ -108,7 +111,7 @@ export function initBroom() {
     }
   }
 
-  broomContainer.addEventListener('mousedown', (e) => {
+  const onMouseDown = (e) => {
     e.preventDefault();
     isDragging = true;
     startDragY = e.clientY;
@@ -116,12 +119,9 @@ export function initBroom() {
     document.documentElement.style.scrollBehavior = 'auto';
     document.body.style.userSelect = 'none';
     document.body.style.webkitUserSelect = 'none';
-    if (window.getSelection) {
-      window.getSelection().removeAllRanges();
-    }
-  });
+  };
 
-  window.addEventListener('mousemove', (e) => {
+  const onMouseMove = (e) => {
     if (!isDragging) return;
     e.preventDefault();
     const trackHeight = track.clientHeight - broomContainer.clientHeight;
@@ -131,33 +131,26 @@ export function initBroom() {
       const scrollDelta = (deltaY / trackHeight) * maxScroll;
       window.scrollTo(0, Math.max(0, Math.min(maxScroll, startScrollY + scrollDelta)));
     }
-  });
+  };
 
+  broomContainer.addEventListener('mousedown', onMouseDown);
+  window.addEventListener('mousemove', onMouseMove);
   window.addEventListener('mouseup', stopDragging);
 
-  broomContainer.addEventListener('touchstart', (e) => {
-    if (e.touches.length > 0) {
-      isDragging = true;
-      startDragY = e.touches[0].clientY;
-      startScrollY = window.scrollY;
-      document.documentElement.style.scrollBehavior = 'auto';
-      if (e.cancelable) e.preventDefault();
-    }
-  }, { passive: false });
+  cleanups.push(() => {
+    broomContainer.removeEventListener('mousedown', onMouseDown);
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', stopDragging);
+  });
 
-  window.addEventListener('touchmove', (e) => {
-    if (!isDragging || e.touches.length === 0) return;
-    if (e.cancelable) e.preventDefault();
-    const trackHeight = track.clientHeight - broomContainer.clientHeight;
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    if (trackHeight > 0 && maxScroll > 0) {
-      const deltaY = e.touches[0].clientY - startDragY;
-      const scrollDelta = (deltaY / trackHeight) * maxScroll;
-      window.scrollTo(0, Math.max(0, Math.min(maxScroll, startScrollY + scrollDelta)));
-    }
-  }, { passive: false });
-
-  window.addEventListener('touchend', stopDragging);
-  window.addEventListener('touchcancel', stopDragging);
+  return destroyBroom;
 }
 
+export function destroyBroom() {
+  if (rafId) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+  cleanups.forEach(fn => fn());
+  cleanups = [];
+}

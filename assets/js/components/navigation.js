@@ -55,7 +55,7 @@ export function initNavigation() {
       if (target) {
         e.preventDefault();
         closeDrawer();
-        const headerOffset = 70;
+        const headerOffset = document.querySelector('.vintage-navbar')?.offsetHeight || 70;
         const elementPosition = target.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         window.scrollTo({

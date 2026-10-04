@@ -9,7 +9,7 @@ import { showToast } from '../core/dom.js';
 import { store } from '../core/store.js';
 import { applyTheme } from './theme.js';
 import { openCaseModal, closeCaseModal } from './modal.js';
-import { goToStation } from '../railway/controls.js';
+import { goToStation, stepStation, toggleProtego, toggleRevelio, featuredIndex, closeDrawer, isDrawerOpen } from '../railway/journey.js';
 import { prefersReducedMotion } from '../core/motion.js';
 
 let cleanups = [];
@@ -24,7 +24,7 @@ export function initSpellBar() {
     if (trigger) {
       const spellId = trigger.getAttribute('data-spell');
       if (spellId) {
-        castSpell(spellId, { trigger });
+        castSpell(spellId, { trigger, url: trigger.dataset.url, projectId: trigger.dataset.project });
       }
     }
   };
@@ -43,6 +43,8 @@ export function initSpellBar() {
     } else if (e.key === 'Escape') {
       if (spellbookOpen) {
         toggleSpellbook(false);
+      } else if (closeDrawer()) {
+        playSfx('paper');
       } else {
         castSpell('finite');
       }
@@ -90,10 +92,12 @@ export function castSpell(spellId, ctx = {}) {
       break;
 
     case 'revelio':
-      // Toggle revelio in station panel or cabinet
-      const revelioBtn = document.getElementById('btnRevelioToggle');
-      if (revelioBtn) revelioBtn.click();
-      document.querySelectorAll('.potion-revelio-card').forEach(c => c.classList.toggle('active'));
+      // Reveal the hidden detail in the open station walkthrough; otherwise toggle the potion cabinet cards
+      if (isDrawerOpen() || ctx.trigger?.closest('.station-drawer')) {
+        toggleRevelio();
+      } else {
+        document.querySelectorAll('.potion-revelio-card').forEach(c => c.classList.toggle('active'));
+      }
       break;
 
     case 'alohomora':
@@ -101,12 +105,12 @@ export function castSpell(spellId, ctx = {}) {
       break;
 
     case 'accio':
-      window.open('https://github.com/rishi-bhardvaj', '_blank', 'noopener');
+      // Anchors with an href already open their own source link; only fall back to the profile otherwise
+      if (!ctx.trigger?.href) window.open('https://github.com/rishi-bhardvaj', '_blank', 'noopener');
       break;
 
     case 'protego':
-      const protegoBtn = document.getElementById('hudProtegoBtn');
-      if (protegoBtn) protegoBtn.click();
+      toggleProtego();
       break;
 
     case 'reparo':
@@ -126,13 +130,12 @@ export function castSpell(spellId, ctx = {}) {
       break;
 
     case 'priorIncantato':
-      const prevBtn = document.getElementById('hudPrevBtn');
-      if (prevBtn) prevBtn.click();
+      stepStation(-1);
       break;
 
     case 'expectoPatronum':
-      // Travel to featured station (Finacle) and trigger patronus particle beacon
-      goToStation(0, { source: 'patronus' });
+      // Travel to the featured station and release the patronus mist
+      goToStation(featuredIndex());
       triggerPatronusMist();
       break;
 

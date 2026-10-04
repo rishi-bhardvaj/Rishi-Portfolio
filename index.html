@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -179,7 +179,7 @@
   </div>
 
   <!-- MASTER BROADSHEET NEWSPAPER CONTAINER -->
-  <main class="broadsheet-wrapper">
+  <main class="broadsheet-wrapper broadsheet-wrapper--head">
 
     <!-- 1. TOP MASTHEAD (HERALDIC CREST & VINTAGE TITLE) -->
     <header class="prophet-header">
@@ -356,10 +356,14 @@
       </div>
     </section>
 
-    <!-- 3.1 THE WIZARDING RAILWAY (STATION WALKTHROUGH) -->
-    <section id="work" class="railway" data-mount="railway">
-      <!-- Pinned Railway Stage injected dynamically via assets/js/railway/index.js -->
-    </section>
+  </main>
+
+  <!-- 3.1 THE WIZARDING RAILWAY: full-bleed cinematic section (stage is injected by assets/js/railway) -->
+  <section id="work" class="railway" data-mount="railway" aria-label="The Wizarding Railway: project stations">
+    <noscript><p style="padding:2rem;text-align:center">Enable JavaScript to board the railway, or jump to the <a href="#archives">case files</a>.</p></noscript>
+  </section>
+
+  <main class="broadsheet-wrapper broadsheet-wrapper--cont">
 
     <!-- 3.2 LOWER MULTI-ARTICLE BROADSHEET DISPATCH ARCHIVE -->
     <section id="archives" class="work-section pt-8 pb-10 border-t-2 border-[var(--border-ink)]">
@@ -826,7 +830,7 @@
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <!-- Main JavaScript App (Works seamlessly both locally on file:/// and via web servers) -->
-  <script defer src="assets/js/bundle.js"></script>
+  <!-- Main JavaScript App (Native ES Module Orchestrator) -->
+  <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>

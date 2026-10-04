@@ -7,7 +7,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* ScrollTrigger snapping owns smoothing; anchor links smooth-scroll in navigation.js */
   background-color: var(--bg-body);
   transition: background-color var(--transition-base);
   overflow-x: clip;

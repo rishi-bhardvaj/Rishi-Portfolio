@@ -58,7 +58,7 @@ export function initCursor() {
   const onMouseOver = (e) => {
     const target = e.target;
     if (!target || !cursorDot) return;
-    const isInteractive = target.closest('a, button, input, textarea, select, [role="button"], summary, .btn-ink, .route-node-btn, .marauder-chamber');
+    const isInteractive = target.closest('a, button, input, textarea, select, [role="button"], summary, .btn-ink, .rm-node, .marauder-chamber');
     if (isInteractive) {
       cursorDot.classList.add('hovering');
     } else {

@@ -1,219 +1,138 @@
 /**
- * Station Panel Component
- * Detailed case-study panel sliding over railway stage with tabs, metrics, and spell actions.
+ * Station Card & Walkthrough Drawer
+ * The card is the compact "arrival board" over the scene; the drawer is the full case study
+ * (The Spell / Ingredients / Incantation / Result / Artifacts). Both are pure functions of project data.
  */
 
-import { openCaseModal } from '../components/modal.js';
-import { playSfx } from '../core/audio.js';
-import { showToast } from '../core/dom.js';
+import { escapeHtml as esc } from '../core/dom.js';
+import { prefersReducedMotion } from '../core/motion.js';
 
-let cleanups = [];
-let revelioRevealed = false;
+const MAX_CHIPS = 6;
+const stripNumbering = (s) => String(s).replace(/^\s*\d+[.)]\s*/, '');
+const pad = (n) => String(n).padStart(2, '0');
 
-export function renderStation(panelEl, project) {
-  if (!panelEl || !project) return;
-  revelioRevealed = false;
+const stamp = (p) => (p.isDemo
+  ? '<span class="stamp-tag is-demo">DEMO CASE FILE</span>'
+  : '<span class="stamp-tag is-verified">VERIFIED DISPATCH</span>');
 
-  const demoBadge = project.isDemo
-    ? `<span class="stamp-distressed text-[9px] px-2 py-0.5">DEMO CASE FILE</span>`
-    : `<span class="stamp-distressed text-[9px] px-2 py-0.5 text-emerald-700 border-emerald-700">VERIFIED ARCHITECTURE</span>`;
+const sourceLink = (p, cls) => (p.github
+  ? `<a class="${cls}" href="${esc(p.github)}" target="_blank" rel="noopener" data-spell="accio">ACCIO SOURCE <i aria-hidden="true">&nearr;</i></a>`
+  : `<button type="button" class="${cls}" disabled title="Source is proprietary or not yet published">ACCIO SOURCE <i aria-hidden="true">&mdash;</i></button>`);
 
-  panelEl.innerHTML = `
-    <div class="panel-inner-scroll">
-      <!-- Panel Header Bar -->
-      <div class="panel-header-bar">
-        <div>
-          <div class="panel-eyebrow">
-            <span>STATION ${project.number} &bull; ${project.category.toUpperCase()}</span>
-            ${demoBadge}
-          </div>
-          <h2 class="panel-station-title">${project.station}</h2>
-          <div class="panel-project-sub">${project.title}</div>
-        </div>
-        <button id="panelReturnBtn" class="btn-panel-return" title="Collapse Panel (Return to Railway)">
-          &times;
-        </button>
-      </div>
+const demoButton = (p, cls) => (p.demo
+  ? `<button type="button" class="${cls}" data-spell="portkey" data-url="${esc(p.demo)}">PORTKEY <i aria-hidden="true">&rarr;</i></button>`
+  : '');
 
-      <!-- Station World Accent Stripe -->
-      <div class="panel-accent-stripe" style="background: linear-gradient(90deg, ${project.theme.accent}, ${project.theme.lantern});"></div>
-
-      <!-- Main Dossier Content Body -->
-      <div class="panel-grid-layout">
-        
-        <!-- Column 1: The Spell (Problem) & Architecture Steps -->
-        <div class="panel-col space-y-5">
-          <!-- 1. The Spell -->
-          <div class="panel-card-box">
-            <div class="panel-section-tag">&bull; THE SPELL // CHALLENGE</div>
-            <h3 class="panel-card-heading">${project.spell.heading}</h3>
-            <p class="panel-card-body">${project.spell.body}</p>
-          </div>
-
-          <!-- 2. The Incantation (Architecture Steps) -->
-          <div class="panel-card-box">
-            <div class="panel-section-tag">&bull; THE INCANTATION // ARCHITECTURE</div>
-            <h3 class="panel-card-heading">${project.incantation.heading}</h3>
-            <p class="panel-card-body mb-3">${project.incantation.body}</p>
-
-            <!-- CSS Flow Diagram from Steps -->
-            <div class="incantation-flow-steps">
-              ${project.incantation.steps.map((step, idx) => `
-                <div class="flow-step-item">
-                  <div class="flow-step-dot">${idx + 1}</div>
-                  <div class="flow-step-text">${step}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-
-          <!-- 3. Revelio Secret Disclosure Area -->
-          <div class="panel-card-box revelio-box" id="revelioSecretBox">
-            <div class="flex items-center justify-between mb-2">
-              <span class="panel-section-tag">&bull; CLASSIFIED DISCLOSURE</span>
-              <button id="btnRevelioToggle" class="btn-spell-action" data-spell="revelio">
-                <span class="spell-sparkle">✦</span>
-                <span>REVELIO</span>
-              </button>
-            </div>
-            <div class="revelio-hidden-text" id="revelioText">
-              ${project.reveal}
-            </div>
-          </div>
-        </div>
-
-        <!-- Column 2: Ingredients, Metrics & Mockup Artifact -->
-        <div class="panel-col space-y-5">
-          <!-- 4. Ingredients (Tech Stack Chips) -->
-          <div class="panel-card-box">
-            <div class="panel-section-tag">&bull; INGREDIENTS // ARSENAL</div>
-            <div class="panel-tech-chips">
-              ${project.technologies.map(t => `<span class="tech-potion-chip">${t}</span>`).join('')}
-            </div>
-          </div>
-
-          <!-- 5. Metrics Matrix -->
-          <div class="panel-card-box">
-            <div class="panel-section-tag">&bull; RESULT // QUANTIFIED IMPACT</div>
-            <p class="font-sans text-xs text-[var(--text-muted)] mb-3">${project.result.summary}</p>
-            <div class="panel-metrics-grid">
-              ${project.result.metrics.map(m => `
-                <div class="metric-tile">
-                  <div class="metric-value">${m.value}</div>
-                  <div class="metric-label">${m.label}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-
-          <!-- 6. Architectural Artifact Thumbnail -->
-          ${project.artifacts && project.artifacts.length > 0 ? `
-            <div class="panel-card-box artifact-card-box">
-              <div class="panel-section-tag">&bull; ARTIFACT // BLUEPRINT</div>
-              <div class="artifact-thumb-wrap" id="panelArtifactWrap" title="Click to inspect in Case Dossier">
-                <img 
-                  src="${project.artifacts[0].src}" 
-                  alt="${project.artifacts[0].alt}" 
-                  class="artifact-img" 
-                  loading="lazy" 
-                  decoding="async"
-                  width="600"
-                  height="380"
-                />
-                <div class="artifact-caption">${project.artifacts[0].caption}</div>
-              </div>
-            </div>
-          ` : ''}
-
-        </div>
-
-      </div>
-
-      <!-- Action Footer Toolbar -->
-      <div class="panel-footer-toolbar">
-        <div class="panel-actions-left">
-          <button id="btnAlohomora" class="btn-spell-action" data-spell="alohomora" title="Open Full Forensic Case Dossier">
-            <span>ALOHOMORA DOSSIER</span>
-            <span class="font-mono text-xs">&nearr;</span>
-          </button>
-        </div>
-
-        <div class="panel-actions-right">
-          ${project.github ? `
-            <a href="${project.github}" target="_blank" rel="noopener" class="btn-stamp-link" title="Accio Source Code">
-              <span>ACCIO SOURCE</span>
-              <span class="font-mono text-xs">&nearr;</span>
-            </a>
-          ` : `
-            <button class="btn-stamp-link opacity-50 cursor-not-allowed" disabled title="Source protected under enterprise proprietary NDA">
-              ACCIO SOURCE (PROPRIETARY)
-            </button>
-          `}
-
-          ${project.demo ? `
-            <button id="btnPortkeyDemo" class="btn-ink text-xs" data-demo-url="${project.demo}">
-              PORTKEY (LIVE DEMO) &rarr;
-            </button>
-          ` : ''}
-        </div>
-      </div>
+export function renderStationCard(el, p, i, total) {
+  const extra = p.technologies.length - MAX_CHIPS;
+  el.innerHTML = `
+    <div class="sc-eyebrow"><span>STATION ${pad(i + 1)} / ${pad(total)}</span><span>${esc(p.category.toUpperCase())}</span></div>
+    <h3 class="sc-name">${esc(p.station)}</h3>
+    <p class="sc-title">${esc(p.title)}</p>
+    <p class="sc-summary">${esc(p.summary)}</p>
+    <ul class="sc-chips" aria-label="Technologies">
+      ${p.technologies.slice(0, MAX_CHIPS).map((t) => `<li>${esc(t)}</li>`).join('')}
+      ${extra > 0 ? `<li class="more">+${extra}</li>` : ''}
+    </ul>
+    <div class="sc-actions">
+      <button type="button" class="sc-btn primary" data-act="open-drawer">ENTER STATION <i aria-hidden="true">&rarr;</i></button>
+      ${sourceLink(p, 'sc-btn')}
+      ${demoButton(p, 'sc-btn')}
     </div>
-  `;
-
-  // Bind panel interactions
-  bindPanelEvents(panelEl, project);
+    <div class="sc-foot">${stamp(p)}<span class="sc-status">${esc(p.status.toUpperCase())}</span></div>`;
 }
 
-function bindPanelEvents(panelEl, project) {
-  const returnBtn = document.getElementById('panelReturnBtn');
-  if (returnBtn) {
-    returnBtn.addEventListener('click', () => {
-      panelEl.classList.remove('open');
-      playSfx('paper');
-    });
-  }
+export function renderDrawer(el, p, i, total) {
+  const steps = p.incantation.steps.map(stripNumbering);
+  const art = p.artifacts || [];
+  el.innerHTML = `
+    <div class="dw-inner">
+      <header class="dw-head">
+        <div>
+          <div class="dw-eyebrow">STATION ${pad(i + 1)} / ${pad(total)} &bull; ${esc(p.category.toUpperCase())} ${stamp(p)}</div>
+          <h2 class="dw-title" id="dwTitle">${esc(p.station)}</h2>
+          <p class="dw-sub">${esc(p.title)}</p>
+        </div>
+        <button type="button" class="dw-close" data-act="close-drawer" aria-label="Close walkthrough (Esc)">&times;</button>
+      </header>
+      <div class="dw-rule" style="--a:${esc(p.theme.accent)};--b:${esc(p.theme.lantern)}"></div>
 
-  // Revelio button
-  const revelioBtn = document.getElementById('btnRevelioToggle');
-  const revelioBox = document.getElementById('revelioSecretBox');
-  if (revelioBtn && revelioBox) {
-    revelioBtn.addEventListener('click', () => {
-      revelioRevealed = !revelioRevealed;
-      playSfx('wand');
-      if (revelioRevealed) {
-        revelioBox.classList.add('revealed');
-        showToast('✦ Revelio! Hidden engineering parameters revealed.');
-      } else {
-        revelioBox.classList.remove('revealed');
-      }
-    });
-  }
+      <div class="dw-body">
+        <section class="dw-sec">
+          <h3 class="dw-label"><b>I</b> The Spell <em>the problem</em></h3>
+          <h4 class="dw-h">${esc(p.spell.heading)}</h4>
+          <p>${esc(p.spell.body)}</p>
+        </section>
 
-  // Alohomora Dossier
-  const alohomoraBtn = document.getElementById('btnAlohomora');
-  const artifactWrap = document.getElementById('panelArtifactWrap');
-  const openDossierHandler = () => {
-    openCaseModal(project.id);
-  };
-  if (alohomoraBtn) alohomoraBtn.addEventListener('click', openDossierHandler);
-  if (artifactWrap) artifactWrap.addEventListener('click', openDossierHandler);
+        <section class="dw-sec">
+          <h3 class="dw-label"><b>II</b> Ingredients <em>the stack</em></h3>
+          <ul class="dw-chips">${p.technologies.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+        </section>
 
-  // Portkey Live Demo
-  const portkeyBtn = document.getElementById('btnPortkeyDemo');
-  if (portkeyBtn) {
-    portkeyBtn.addEventListener('click', () => {
-      const url = portkeyBtn.getAttribute('data-demo-url');
-      if (!url) return;
-      playSfx('whistle');
-      showToast('🌀 Portkey enchanted! Transporting to live demo...');
-      setTimeout(() => {
-        if (url.startsWith('#')) {
-          const el = document.querySelector(url);
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          window.open(url, '_blank', 'noopener');
-        }
-      }, 400);
-    });
-  }
+        <section class="dw-sec">
+          <h3 class="dw-label"><b>III</b> Incantation <em>the architecture</em></h3>
+          <h4 class="dw-h">${esc(p.incantation.heading)}</h4>
+          <p>${esc(p.incantation.body)}</p>
+          <ol class="dw-steps">${steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
+        </section>
+
+        <section class="dw-sec">
+          <h3 class="dw-label"><b>IV</b> Result <em>the impact</em></h3>
+          <p>${esc(p.result.summary)}</p>
+          <div class="dw-metrics">
+            ${p.result.metrics.map((m) => `<div class="dw-metric"><strong data-count="${esc(m.value)}">${esc(m.value)}</strong><span>${esc(m.label)}</span></div>`).join('')}
+          </div>
+        </section>
+
+        ${art.length ? `
+        <section class="dw-sec">
+          <h3 class="dw-label"><b>V</b> Artifacts <em>the evidence</em></h3>
+          <div class="dw-artifacts">
+            ${art.map((a) => `
+              <figure>
+                <img src="${esc(a.src)}" alt="${esc(a.alt)}" width="640" height="400" loading="lazy" decoding="async" />
+                <figcaption>${esc(a.caption)}</figcaption>
+              </figure>`).join('')}
+          </div>
+        </section>` : ''}
+
+        <section class="dw-sec dw-reveal" id="dwReveal" data-revealed="false">
+          <div class="dw-reveal-head">
+            <h3 class="dw-label"><b>&#10022;</b> Classified <em>hidden detail</em></h3>
+            <button type="button" class="dw-spell" data-spell="revelio" aria-expanded="false" aria-controls="dwRevealText">REVELIO</button>
+          </div>
+          <p class="dw-reveal-text" id="dwRevealText">${esc(p.reveal)}</p>
+        </section>
+      </div>
+
+      <footer class="dw-foot">
+        <button type="button" class="dw-btn ghost" data-act="close-drawer">&larr; RETURN TO TRAIN</button>
+        <div class="dw-foot-actions">
+          <button type="button" class="dw-btn" data-spell="alohomora" data-project="${esc(p.id)}">ALOHOMORA <i aria-hidden="true">&#9993;</i></button>
+          ${sourceLink(p, 'dw-btn')}
+          ${demoButton(p, 'dw-btn solid')}
+        </div>
+      </footer>
+    </div>`;
+}
+
+/** Counts "79", "40+", "<15ms", "99.99%" up from zero once, preserving the surrounding text. */
+export function countUpMetrics(root) {
+  if (prefersReducedMotion) return;
+  root.querySelectorAll('[data-count]').forEach((node) => {
+    const m = /^([<>~]?)(\d+(?:\.\d+)?)(.*)$/.exec(node.dataset.count);
+    if (!m) return;
+    const [, pre, numStr, post] = m;
+    const target = parseFloat(numStr);
+    const decimals = (numStr.split('.')[1] || '').length;
+    const start = performance.now();
+    const dur = 900;
+    const tick = (now) => {
+      const k = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - k, 3);
+      node.textContent = `${pre}${(target * eased).toFixed(decimals)}${post}`;
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
 }

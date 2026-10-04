@@ -7,10 +7,10 @@ An interactive, data-driven broadsheet portfolio and cinematic railway experienc
 ## 🚂 Architectural Highlights & Features
 
 1. **The Wizarding Railway (Stations = Projects)**:
-   - A pinned cinematic railway journey across software engineering case studies.
+   - A pinned cinematic railway: scrolling drives the train station to station (snapping to each), with parallax scenery, turning wheels and steam. Buttons, arrow keys and swipe travel too.
    - Interactive parchment route map with live track progress and glowing stop seals.
    - Locomotive steam audio, departure bells, and platform arrival soundscapes.
-   - Station dossier panel with technical incantations, metrics, and architecture diagrams.
+   - Each station shows an arrival board; ENTER STATION opens a walkthrough drawer (The Spell, Ingredients, Incantation, Result, Artifacts, REVELIO).
    - Keyboard arrows, touch swipe, pointer dragging, and HUD controls.
 
 2. **The "Add One Object" Data Architecture**:
@@ -93,12 +93,11 @@ Rishi-Portfolio/
 │   │   │   └── spells.js            # 14 castable incantations & hotkeys
 │   │   ├── railway/
 │   │   │   ├── index.js             # Railway master orchestrator
-│   │   │   ├── scene.js             # Stage markup generator
-│   │   │   ├── train.js             # Steam train SVG assembly & rolling wheels
-│   │   │   ├── platform.js          # Platform 9¾ gates & lantern poles
-│   │   │   ├── route-map.js         # Parchment track & station stop nodes
-│   │   │   ├── station-panel.js     # Station case study renderer
-│   │   │   ├── controls.js          # Navigation buttons, keyboard, touch swipe
+│   │   │   ├── scene.js             # Stage markup (world, train, HUD, gate, drawer)
+│   │   │   ├── art.js               # Procedural SVG: parallax world tiles & the steam train
+│   │   │   ├── journey.js           # Engine: scroll-scrubbed travel, boarding, input, drawer, Protego
+│   │   │   ├── route-map.js         # Parchment track & station nodes (generated from data)
+│   │   │   ├── station-panel.js     # Station card + walkthrough drawer renderers
 │   │   │   └── sfx.js               # Railway acoustic wrappers
 │   │   └── components/
 │   │       ├── theme.js             # Lumos/Nox edition switcher

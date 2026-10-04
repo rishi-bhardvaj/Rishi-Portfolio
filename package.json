@@ -5,7 +5,6 @@
   "type": "module",
   "description": "The Wizarding Railway - Interactive Portfolio for Rishi",
   "scripts": {
-    "dev": "npx serve .",
-    "build": "npx esbuild assets/js/main.js --bundle --outfile=assets/js/bundle.js --format=iife"
+    "dev": "npx serve ."
   }
 }

@@ -109,3 +109,8 @@ export function trapFocus(container) {
   container.addEventListener('keydown', onKeyDown);
   return () => container.removeEventListener('keydown', onKeyDown);
 }
+
+/** Escapes a string for safe interpolation into HTML templates. */
+export function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]));
+}

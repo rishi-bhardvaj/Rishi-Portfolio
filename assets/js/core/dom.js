@@ -66,3 +66,46 @@ export function assertDom(ids) {
     console.warn('[assertDom] Missing expected DOM mount points / elements:', missing);
   }
 }
+
+/**
+ * WCAG-compliant Focus Trap for modals & dialogs
+ * Traps Tab / Shift+Tab cycling within container.
+ * Returns an unbind cleanup function.
+ * @param {HTMLElement} container
+ * @returns {() => void} cleanup function
+ */
+export function trapFocus(container) {
+  if (!container || typeof document === 'undefined') return () => {};
+
+  const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+  const onKeyDown = (e) => {
+    if (e.key !== 'Tab') return;
+
+    const focusables = Array.from(container.querySelectorAll(focusableSelector))
+      .filter(el => !el.disabled && el.offsetParent !== null);
+
+    if (focusables.length === 0) {
+      e.preventDefault();
+      return;
+    }
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      }
+    } else {
+      if (document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
+      }
+    }
+  };
+
+  container.addEventListener('keydown', onKeyDown);
+  return () => container.removeEventListener('keydown', onKeyDown);
+}

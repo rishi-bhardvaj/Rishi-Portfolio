@@ -22,10 +22,10 @@ export function initControls(onStationChange) {
   const reboardBtn = document.getElementById('hudReboardBtn');
   const stage = document.getElementById('railwayStage');
 
-  const visibleProjects = projects.filter(p => !p.hidden);
-  const total = visibleProjects.length;
+  const getVisibleProjects = () => projects.filter(p => !p.hidden);
 
   function handleGo(targetIndex, source) {
+    const total = getVisibleProjects().length;
     if (store.get('protegoLock') && source !== 'protego-override') {
       showToast('🛡️ Protego Shield active: Station navigation is pinned.');
       return;
@@ -92,7 +92,7 @@ export function initControls(onStationChange) {
     } else if (e.key === 'Home') {
       handleGo(0, 'keyboard');
     } else if (e.key === 'End') {
-      handleGo(total - 1, 'keyboard');
+      handleGo(getVisibleProjects().length - 1, 'keyboard');
     }
   };
   window.addEventListener('keydown', onKeyDown);

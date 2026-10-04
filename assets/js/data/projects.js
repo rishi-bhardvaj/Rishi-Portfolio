@@ -404,7 +404,9 @@ const rawProjects = [
     status: 'demo',
     isDemo: true,
     featured: false,
-    hidden: true,
+    get hidden() {
+      return !isSecretStationUnlocked();
+    },
     technologies: ['TypeScript', 'AST Parsing', 'Babel Core', 'Web Workers', 'Vector Graphics'],
     spell: {
       heading: 'The Hidden Chamber of Code',
@@ -447,25 +449,50 @@ const rawProjects = [
   }
 ];
 
+export function isSecretStationUnlocked() {
+  if (typeof window === 'undefined' || !window.sessionStorage) return false;
+  return sessionStorage.getItem('chronicle_unlocked_secret') === 'true';
+}
+
+export function unlockSecretStation() {
+  if (typeof window !== 'undefined' && window.sessionStorage) {
+    sessionStorage.setItem('chronicle_unlocked_secret', 'true');
+  }
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('chronicle:secret-unlocked'));
+  }
+}
+
 // Run dev-time validation
 rawProjects.forEach(validateProject);
 
-export const projects = Object.freeze(rawProjects.map(p => Object.freeze({
-  ...p,
-  technologies: Object.freeze([...p.technologies]),
-  spell: Object.freeze({ ...p.spell }),
-  incantation: Object.freeze({
-    ...p.incantation,
-    steps: Object.freeze([...p.incantation.steps])
-  }),
-  result: Object.freeze({
-    ...p.result,
-    metrics: Object.freeze(p.result.metrics.map(m => Object.freeze({ ...m })))
-  }),
-  artifacts: Object.freeze(p.artifacts.map(a => Object.freeze({ ...a }))),
-  theme: Object.freeze({ ...p.theme })
-})));
+export const projects = Object.freeze(rawProjects.map(p => {
+  const base = {
+    ...p,
+    technologies: Object.freeze([...p.technologies]),
+    spell: Object.freeze({ ...p.spell }),
+    incantation: Object.freeze({
+      ...p.incantation,
+      steps: Object.freeze([...p.incantation.steps])
+    }),
+    result: Object.freeze({
+      ...p.result,
+      metrics: Object.freeze(p.result.metrics.map(m => Object.freeze({ ...m })))
+    }),
+    artifacts: Object.freeze(p.artifacts.map(a => Object.freeze({ ...a }))),
+    theme: Object.freeze({ ...p.theme })
+  };
+  if (p.id === 'room-of-requirement') {
+    Object.defineProperty(base, 'hidden', {
+      get() { return !isSecretStationUnlocked(); },
+      enumerable: true,
+      configurable: false
+    });
+  }
+  return Object.freeze(base);
+}));
 
 export function getProjectById(id) {
   return projects.find(p => p.id === id) || null;
 }
+

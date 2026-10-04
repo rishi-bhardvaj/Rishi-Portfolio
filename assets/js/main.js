@@ -17,6 +17,9 @@ import { initContact } from './components/contact.js';
 import { initBroom } from './components/broom.js';
 import { initOwl } from './components/owl.js';
 import { initSpellBar } from './components/spell-bar.js';
+import { initMarauder } from './components/marauder.js';
+import { initCursor } from './components/cursor.js';
+import { initEasterEggs } from './components/easter-eggs.js';
 import { assertDom } from './core/dom.js';
 
 let teardowns = [];
@@ -43,7 +46,10 @@ export function initAll() {
     initContact,
     initBroom,
     initOwl,
-    initSpellBar
+    initSpellBar,
+    initMarauder,
+    initCursor,
+    initEasterEggs
   ];
 
   initializers.forEach(fn => {

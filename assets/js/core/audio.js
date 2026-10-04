@@ -107,7 +107,7 @@ export function toggleSound() {
 
 /**
  * Play a synthesized sound effect
- * @param {'wand'|'paper'|'bell'|'whistle'|'door'|'station'|'click'|'arrival'|'chime'|'thunder'} type
+ * @param {'wand'|'paper'|'bell'|'whistle'|'door'|'station'|'click'|'arrival'|'chime'|'thunder'|'hoot'|'seal'|'dark-mark'|'patronus'} type
  */
 export function playSfx(type) {
   if (!isSoundEnabled) return;
@@ -312,6 +312,97 @@ export function playSfx(type) {
       gain.connect(masterGain);
       osc.start(now);
       osc.stop(now + 0.9);
+      break;
+    }
+
+    case 'hoot': {
+      // Owl hoot: two gentle downward glides
+      const hootPulse = (startTime, startFreq, endFreq, dur) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(startFreq, startTime);
+        osc.frequency.exponentialRampToValueAtTime(endFreq, startTime + dur);
+
+        gain.gain.setValueAtTime(0.001, startTime);
+        gain.gain.linearRampToValueAtTime(0.14, startTime + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+
+        osc.connect(gain);
+        gain.connect(masterGain);
+        osc.start(startTime);
+        osc.stop(startTime + dur);
+      };
+
+      hootPulse(now, 550, 480, 0.22);
+      hootPulse(now + 0.26, 520, 410, 0.35);
+      break;
+    }
+
+    case 'seal': {
+      // Wax seal fracture: crisp crack followed by resonant snap
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(1400, now);
+      osc.frequency.exponentialRampToValueAtTime(160, now + 0.08);
+
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.1);
+      break;
+    }
+
+    case 'dark-mark': {
+      // Sinister low dissonant drone
+      const o1 = ctx.createOscillator();
+      const o2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      o1.type = 'sawtooth';
+      o2.type = 'triangle';
+      o1.frequency.setValueAtTime(55, now);
+      o1.frequency.linearRampToValueAtTime(45, now + 1.8);
+      o2.frequency.setValueAtTime(77.78, now); // Diminished 5th tritone
+      o2.frequency.linearRampToValueAtTime(65, now + 1.8);
+
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.linearRampToValueAtTime(0.15, now + 0.5);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+
+      o1.connect(gain);
+      o2.connect(gain);
+      gain.connect(masterGain);
+      o1.start(now);
+      o2.start(now);
+      o1.stop(now + 2.0);
+      o2.stop(now + 2.0);
+      break;
+    }
+
+    case 'patronus': {
+      // Silvery celestial shimmer arpeggio
+      const notes = [880, 1174.66, 1479.98, 1760];
+      notes.forEach((freq, idx) => {
+        const t = now + idx * 0.12;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.05, t + 0.6);
+
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.12, t + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+
+        osc.connect(gain);
+        gain.connect(masterGain);
+        osc.start(t);
+        osc.stop(t + 0.7);
+      });
       break;
     }
   }

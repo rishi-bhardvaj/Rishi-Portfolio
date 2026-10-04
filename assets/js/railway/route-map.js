@@ -51,18 +51,58 @@ export function createRouteMapMarkup() {
 }
 
 export function initRouteMap(onStationSelect) {
-  const nodeBtns = document.querySelectorAll('.route-node-btn');
+  function bindNodes() {
+    const nodeBtns = document.querySelectorAll('.route-node-btn');
+    nodeBtns.forEach(btn => {
+      const handler = () => {
+        const idx = parseInt(btn.getAttribute('data-station-index'), 10);
+        if (!isNaN(idx) && typeof onStationSelect === 'function') {
+          onStationSelect(idx, { source: 'route-map' });
+        }
+      };
+      btn.addEventListener('click', handler);
+      cleanups.push(() => btn.removeEventListener('click', handler));
+    });
+  }
 
-  nodeBtns.forEach(btn => {
-    const handler = () => {
-      const idx = parseInt(btn.getAttribute('data-station-index'), 10);
-      if (!isNaN(idx) && typeof onStationSelect === 'function') {
-        onStationSelect(idx, { source: 'route-map' });
-      }
-    };
-    btn.addEventListener('click', handler);
-    cleanups.push(() => btn.removeEventListener('click', handler));
-  });
+  bindNodes();
+
+  const onSecretUnlocked = () => {
+    const listEl = document.getElementById('routeNodesList');
+    const tagEl = document.querySelector('.route-map-tag');
+    const visibleProjects = projects.filter(p => !p.hidden);
+
+    if (tagEl) {
+      tagEl.innerHTML = `EXPRESS LINE &bull; ${visibleProjects.length} STATIONS <span style="color:var(--accent-crimson)">(VAULT OPEN)</span>`;
+    }
+
+    if (listEl) {
+      listEl.innerHTML = visibleProjects.map((project, idx) => `
+        <button 
+          class="route-node-btn ${idx === store.get('activeStation') ? 'current' : 'upcoming'}" 
+          data-station-index="${idx}"
+          data-station-id="${project.id}"
+          aria-label="Station ${project.number}: ${project.station}"
+          ${idx === store.get('activeStation') ? 'aria-current="step"' : ''}
+          role="listitem"
+        >
+          <div class="node-ring">
+            <span class="node-number">${project.number}</span>
+            <span class="node-seal" aria-hidden="true">${project.id === 'room-of-requirement' ? '⚡' : '★'}</span>
+          </div>
+          <div class="node-label-wrap">
+            <span class="node-station-name">${project.station}</span>
+            <span class="node-category">${project.categoryKey.toUpperCase()}</span>
+          </div>
+        </button>
+      `).join('');
+      bindNodes();
+      updateRouteMapUI(store.get('activeStation'));
+    }
+  };
+
+  window.addEventListener('chronicle:secret-unlocked', onSecretUnlocked);
+  cleanups.push(() => window.removeEventListener('chronicle:secret-unlocked', onSecretUnlocked));
 
   return destroyRouteMap;
 }

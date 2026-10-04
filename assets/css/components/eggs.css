@@ -1,0 +1,156 @@
+/**
+ * EASTER EGGS STYLES
+ * Harmless cinematic spell overlays: Morsmordre dark mark, Patronus mist, seal break, and footer owl.
+ */
+
+/* Dark Mark Overlay */
+.dark-mark-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 45%, rgba(6, 44, 25, 0.45) 0%, rgba(2, 18, 10, 0.75) 70%, rgba(0, 0, 0, 0.85) 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.dark-mark-overlay.active {
+  opacity: 1;
+}
+
+.dark-mark-graphic {
+  width: min(320px, 70vw);
+  height: auto;
+  filter: drop-shadow(0 0 25px #10b981) drop-shadow(0 0 50px #059669);
+  animation: darkMarkAscend 2.5s ease-out forwards;
+}
+
+@keyframes darkMarkAscend {
+  0% {
+    transform: translateY(40px) scale(0.85);
+    opacity: 0;
+  }
+  25% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-15px) scale(1.04);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-35px) scale(1.08);
+    opacity: 0;
+  }
+}
+
+/* Silver Patronus Mist Overlay */
+.patronus-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, rgba(224, 242, 254, 0.35) 0%, rgba(186, 230, 253, 0.15) 50%, transparent 80%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  overflow: hidden;
+}
+
+.patronus-overlay.active {
+  opacity: 1;
+}
+
+.patronus-stag-silhouette {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(360px, 75vw);
+  height: auto;
+  filter: drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 60px #7dd3fc);
+  animation: patronusPrance 4.5s ease-in-out forwards;
+}
+
+@keyframes patronusPrance {
+  0% {
+    opacity: 0;
+    transform: translate(-80%, -40%) scale(0.8);
+  }
+  30% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(-30%, -55%) scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(10%, -65%) scale(1.15);
+  }
+}
+
+/* Masthead Crest Seal Breaking Animation */
+.nav-brand-crest.seal-breaking,
+.masthead-monogram.seal-breaking {
+  animation: sealFracture 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  box-shadow: 0 0 25px 6px #f59e0b, 0 0 50px 12px #ef4444;
+}
+
+@keyframes sealFracture {
+  10%, 90% { transform: translate3d(-2px, 0, 0) scale(1.08); }
+  20%, 80% { transform: translate3d(3px, 0, 0) scale(1.12); }
+  30%, 50%, 70% { transform: translate3d(-5px, 0, 0) scale(1.15); }
+  40%, 60% { transform: translate3d(5px, 0, 0) scale(1.15); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Clickable Footer Owl */
+.footer-owl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #c4b595;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 1.15rem;
+}
+
+.footer-owl-btn:hover,
+.footer-owl-btn:focus-visible {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: #f59e0b;
+  color: #fef08a;
+  transform: translateY(-2px) scale(1.1);
+}
+
+.footer-owl-btn.hooting {
+  animation: owlHootBounce 0.5s ease;
+}
+
+@keyframes owlHootBounce {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-12deg) scale(1.15); }
+  50% { transform: rotate(10deg) scale(1.2); }
+  75% { transform: rotate(-5deg) scale(1.1); }
+}
+
+/* Reduced motion adjustments */
+@media (prefers-reduced-motion: reduce) {
+  .dark-mark-graphic,
+  .patronus-stag-silhouette,
+  .footer-owl-btn.hooting,
+  .nav-brand-crest.seal-breaking {
+    animation: none;
+    transform: none;
+  }
+}

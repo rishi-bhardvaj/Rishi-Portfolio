@@ -267,7 +267,7 @@
     }
   ];
 
-  // 2. THEME ENGINE
+  // 2. THEME ENGINE & WAND SPELL CASTING (Lumos / Nox)
   const THEME_KEY = 'prophet_theme_edition';
   function initTheme() {
     const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -287,6 +287,7 @@
       const newTheme = isCurrentlyNox ? 'lumos' : 'nox';
       applyTheme(newTheme);
       localStorage.setItem(THEME_KEY, newTheme);
+      triggerWandSpell(newTheme);
     }
 
     if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
@@ -309,6 +310,265 @@
         ? `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`
         : `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
     });
+  }
+
+  function playWandSwish(ctx, startTime, duration = 0.32) {
+    const bufferSize = Math.floor(ctx.sampleRate * duration);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.sin((i / bufferSize) * Math.PI);
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(320, startTime);
+    filter.frequency.exponentialRampToValueAtTime(2400, startTime + duration * 0.45);
+    filter.frequency.exponentialRampToValueAtTime(400, startTime + duration);
+    filter.Q.value = 2.4;
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.001, startTime);
+    gain.gain.linearRampToValueAtTime(0.38, startTime + duration * 0.35);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start(startTime);
+  }
+
+  function playLumosSpellSound() {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // 1. Airy Celestial Wind Whoosh
+    playWandSwish(ctx, now, 0.36);
+
+    // 2. Magic Arc Ignition Sparkles
+    const sparkCount = 4;
+    for (let s = 0; s < sparkCount; s++) {
+      const sparkTime = now + 0.12 + s * 0.035;
+      const sparkOsc = ctx.createOscillator();
+      const sparkGain = ctx.createGain();
+      sparkOsc.type = 'sawtooth';
+      sparkOsc.frequency.setValueAtTime(2800 + s * 600, sparkTime);
+      sparkOsc.frequency.exponentialRampToValueAtTime(950, sparkTime + 0.05);
+
+      sparkGain.gain.setValueAtTime(0.24, sparkTime);
+      sparkGain.gain.exponentialRampToValueAtTime(0.001, sparkTime + 0.05);
+
+      sparkOsc.connect(sparkGain);
+      sparkGain.connect(ctx.destination);
+      sparkOsc.start(sparkTime);
+      sparkOsc.stop(sparkTime + 0.055);
+    }
+
+    // 3. Magical Airy Celesta Chime Arpeggio & Lumos Light Hum
+    const lumosNotes = [
+      { freq: 493.88, delay: 0.12, dur: 0.9 },  // B4
+      { freq: 659.25, delay: 0.18, dur: 0.95 }, // E5
+      { freq: 783.99, delay: 0.24, dur: 1.0 },  // G5
+      { freq: 987.77, delay: 0.30, dur: 1.1 },  // B5
+      { freq: 1318.5, delay: 0.36, dur: 1.2 },  // E6
+      { freq: 1760.0, delay: 0.42, dur: 1.3 },  // A6
+      { freq: 2349.3, delay: 0.48, dur: 1.4 }   // D7
+    ];
+
+    lumosNotes.forEach((note, idx) => {
+      const startTime = now + note.delay;
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(note.freq, startTime);
+
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(note.freq * 2.002, startTime);
+
+      gain.gain.setValueAtTime(0.001, startTime);
+      gain.gain.linearRampToValueAtTime(0.26 / (idx * 0.3 + 1), startTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + note.dur);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc1.start(startTime);
+      osc2.start(startTime);
+      osc1.stop(startTime + note.dur + 0.05);
+      osc2.stop(startTime + note.dur + 0.05);
+    });
+  }
+
+  function playNoxSpellSound() {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    // 1. Airy Twilight Wind Swoosh
+    playWandSwish(ctx, now, 0.3);
+
+    // 2. Extinguishing Light Suction Fizzle
+    const bufferSize = Math.floor(ctx.sampleRate * 0.55);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.4));
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(3800, now + 0.1);
+    filter.frequency.exponentialRampToValueAtTime(90, now + 0.65);
+    filter.Q.value = 3.2;
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.001, now + 0.1);
+    gain.gain.linearRampToValueAtTime(0.28, now + 0.18);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.68);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start(now + 0.1);
+
+    // 3. Descending Twilight Harmony
+    const noxNotes = [
+      { freq: 1567.98, delay: 0.10, dur: 0.6 },
+      { freq: 1318.51, delay: 0.16, dur: 0.65 },
+      { freq: 987.77,  delay: 0.22, dur: 0.7 },
+      { freq: 783.99,  delay: 0.28, dur: 0.75 },
+      { freq: 587.33,  delay: 0.34, dur: 0.8 },
+      { freq: 329.63,  delay: 0.40, dur: 0.9 }
+    ];
+
+    noxNotes.forEach((note, idx) => {
+      const startTime = now + note.delay;
+      const osc = ctx.createOscillator();
+      const toneGain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(note.freq, startTime);
+      osc.frequency.exponentialRampToValueAtTime(note.freq * 0.85, startTime + note.dur);
+
+      toneGain.gain.setValueAtTime(0.001, startTime);
+      toneGain.gain.linearRampToValueAtTime(0.22 / (idx * 0.25 + 1), startTime + 0.03);
+      toneGain.gain.exponentialRampToValueAtTime(0.0001, startTime + note.dur);
+
+      osc.connect(toneGain);
+      toneGain.connect(ctx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + note.dur + 0.05);
+    });
+  }
+
+  let wandSpellTimeout = null;
+  function triggerWandSpell(spellType) {
+    const isLumos = spellType === 'lumos';
+
+    // 1. Play subtle airy spell sound
+    if (isLumos) {
+      playLumosSpellSound();
+    } else {
+      playNoxSpellSound();
+    }
+
+    // 2. Render Wand Overlay
+    let overlay = document.getElementById('wandSpellOverlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'wandSpellOverlay';
+      overlay.className = 'wand-spell-overlay';
+      document.body.appendChild(overlay);
+    }
+    if (wandSpellTimeout) clearTimeout(wandSpellTimeout);
+    overlay.innerHTML = '';
+
+    const wandWrapper = document.createElement('div');
+    wandWrapper.className = 'magic-wand-wrapper';
+    wandWrapper.innerHTML = `
+      <svg class="magic-wand-svg" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="elderWoodGrad" x1="40" y1="280" x2="280" y2="40" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#140b04"/>
+            <stop offset="25%" stop-color="#2d160a"/>
+            <stop offset="60%" stop-color="#4a2612"/>
+            <stop offset="85%" stop-color="#6e391b"/>
+            <stop offset="100%" stop-color="#8a4823"/>
+          </linearGradient>
+          <filter id="wandTipGlow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="12" result="blur1"/>
+            <feGaussianBlur stdDeviation="6" result="blur2"/>
+            <feMerge>
+              <feMergeNode in="blur1"/>
+              <feMergeNode in="blur2"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Elder Wand Shaft -->
+        <polygon points="44,284 56,296 284,56 274,44" fill="url(#elderWoodGrad)" stroke="#100803" stroke-width="2"/>
+        
+        <!-- Elder Wand Spherical Knots / Elderberries -->
+        <circle cx="70" cy="258" r="9" fill="#2d160a" stroke="#100803" stroke-width="1.5"/>
+        <circle cx="106" cy="222" r="8.5" fill="#3b1d0d" stroke="#100803" stroke-width="1.5"/>
+        <circle cx="148" cy="180" r="7.8" fill="#4a2612" stroke="#100803" stroke-width="1.5"/>
+        <circle cx="192" cy="136" r="6.8" fill="#5c3017" stroke="#100803" stroke-width="1.5"/>
+        <circle cx="236" cy="92" r="5.8" fill="#6e391b" stroke="#100803" stroke-width="1.5"/>
+
+        <!-- Inscribed Gold Rune Bands -->
+        <line x1="62" y1="266" x2="78" y2="250" stroke="#d4af37" stroke-width="2.5"/>
+        <line x1="98" y1="230" x2="114" y2="214" stroke="#d4af37" stroke-width="2.5"/>
+        <line x1="140" y1="188" x2="156" y2="172" stroke="#d4af37" stroke-width="2"/>
+        <line x1="184" y1="144" x2="200" y2="128" stroke="#d4af37" stroke-width="2"/>
+
+        <!-- Glowing Wand Tip -->
+        <circle cx="280" cy="48" r="${isLumos ? '18' : '14'}" fill="${isLumos ? '#ffffff' : '#f3e8ff'}" filter="url(#wandTipGlow)"/>
+        <circle cx="280" cy="48" r="${isLumos ? '8' : '6'}" fill="${isLumos ? '#fef08a' : '#c084fc'}"/>
+      </svg>
+    `;
+
+    // Radial light wave centered on wand tip
+    const burst = document.createElement('div');
+    burst.className = `spell-light-burst ${isLumos ? 'lumos-burst' : 'nox-burst'}`;
+    burst.style.right = '18%';
+    burst.style.bottom = '26%';
+
+    overlay.appendChild(burst);
+    overlay.appendChild(wandWrapper);
+
+    // Stardust Sparkles from tip
+    const sparkleCount = 20;
+    for (let i = 0; i < sparkleCount; i++) {
+      const star = document.createElement('div');
+      star.className = 'wand-sparkle-star';
+      const angle = (i / sparkleCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.7;
+      const distance = 50 + Math.random() * 120;
+      const sx = Math.cos(angle) * distance;
+      const sy = Math.sin(angle) * distance;
+      star.style.setProperty('--sx', `${sx}px`);
+      star.style.setProperty('--sy', `${sy}px`);
+      star.style.right = 'calc(8% + 50px)';
+      star.style.bottom = 'calc(12% + 260px)';
+      star.style.backgroundColor = isLumos
+        ? (i % 2 === 0 ? '#fef08a' : '#f59e0b')
+        : (i % 2 === 0 ? '#e9d5ff' : '#9333ea');
+      star.style.boxShadow = isLumos
+        ? '0 0 12px #fde047, 0 0 22px #eab308'
+        : '0 0 12px #c084fc, 0 0 22px #7e22ce';
+      overlay.appendChild(star);
+      setTimeout(() => star.remove(), 900);
+    }
+
+    wandSpellTimeout = setTimeout(() => {
+      overlay.innerHTML = '';
+    }, 1150);
   }
 
   // 3. AUDIO & HEDWIG'S THEME SYNTHESIZER

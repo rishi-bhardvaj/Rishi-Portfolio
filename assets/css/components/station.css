@@ -1,0 +1,337 @@
+/* ==========================================================================
+   STATION CASE STUDY PANEL & REVELIO DISCLOSURE
+   ========================================================================== */
+
+.station-panel {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  bottom: 60px;
+  width: 580px;
+  max-width: calc(100% - 40px);
+  background: var(--bg-parchment-card);
+  color: var(--text-ink);
+  border: 2px solid var(--border-ink);
+  box-shadow: -8px 0 35px rgba(0, 0, 0, 0.65), var(--shadow-broadsheet);
+  z-index: 24;
+  transform: translate3d(115%, 0, 0);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.station-panel.open {
+  transform: translate3d(0, 0, 0);
+}
+
+.panel-inner-scroll {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.panel-header-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.panel-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-subtle);
+  letter-spacing: 0.15em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.panel-station-title {
+  font-family: var(--font-headline);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-ink);
+  margin: 0;
+  line-height: 1.15;
+}
+
+.panel-project-sub {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 2px;
+}
+
+.btn-panel-return {
+  background: none;
+  border: 1px solid var(--border-divider);
+  color: var(--text-ink);
+  font-size: 1.6rem;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.btn-panel-return:hover {
+  background: var(--stamp-red);
+  color: #fff;
+  border-color: var(--stamp-red);
+}
+
+.panel-accent-stripe {
+  height: 3px;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 2px;
+}
+
+.panel-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.panel-card-box {
+  background: var(--bg-parchment-light);
+  border: 1px solid var(--border-divider);
+  padding: 16px;
+  border-radius: 3px;
+}
+
+.panel-section-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  font-weight: bold;
+  color: var(--stamp-red);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.panel-card-heading {
+  font-family: var(--font-headline);
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: var(--text-ink);
+  margin: 0 0 6px 0;
+}
+
+.panel-card-body {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Incantation Flow Steps */
+.incantation-flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.flow-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(22, 18, 11, 0.04);
+  border-left: 2px solid var(--accent-gold);
+}
+
+.flow-step-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  color: #120e0a;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.flow-step-text {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-ink);
+}
+
+/* Revelio Secret Box with Ink-Spread Clip Path */
+.revelio-box {
+  border-style: dashed;
+  border-color: var(--accent-gold);
+}
+
+.btn-spell-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: #18120c;
+  color: #fef08a;
+  border: 1px solid var(--accent-gold);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-spell-action:hover {
+  background: #6e1423;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+.spell-sparkle {
+  color: #fef08a;
+}
+
+.revelio-hidden-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-ink);
+  line-height: 1.5;
+  padding: 10px;
+  background: #fbf5e6;
+  border-left: 3px solid var(--stamp-red);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  clip-path: circle(0% at 50% 50%);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.revelio-box.revealed .revelio-hidden-text {
+  max-height: 160px;
+  opacity: 1;
+  clip-path: circle(140% at 50% 50%);
+  margin-top: 8px;
+}
+
+/* Tech Chips */
+.panel-tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tech-potion-chip {
+  padding: 3px 8px;
+  background: #f3ebd9;
+  border: 1px solid var(--border-divider);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-ink);
+  border-radius: 2px;
+}
+
+/* Metrics Grid */
+.panel-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.metric-tile {
+  padding: 10px;
+  background: rgba(22, 18, 11, 0.03);
+  border: 1px solid var(--border-divider);
+  border-radius: 2px;
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--stamp-red);
+}
+
+.metric-label {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  color: var(--text-subtle);
+  margin-top: 2px;
+}
+
+/* Artifact Card */
+.artifact-thumb-wrap {
+  cursor: pointer;
+  border: 1px solid var(--border-divider);
+  border-radius: 3px;
+  overflow: hidden;
+  background: #111;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.artifact-thumb-wrap:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.artifact-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.artifact-caption {
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: var(--text-subtle);
+  background: var(--bg-parchment-light);
+}
+
+/* Panel Footer Toolbar */
+.panel-footer-toolbar {
+  padding: 14px 24px;
+  border-top: 2px solid var(--border-ink);
+  background: var(--bg-parchment-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.panel-actions-left,
+.panel-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .station-panel {
+    top: 60px;
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+    width: auto;
+    max-width: none;
+  }
+  .panel-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

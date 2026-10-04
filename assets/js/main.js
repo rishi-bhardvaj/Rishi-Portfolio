@@ -8,6 +8,7 @@ import { initAudio } from './components/audio.js';
 import { initNavigation } from './components/navigation.js';
 import { initMasthead } from './components/masthead.js';
 import { initPortrait } from './components/portrait.js';
+import { initRailway } from './railway/index.js';
 import { initArticles } from './components/articles.js';
 import { initLabReport } from './components/lab-report.js';
 import { initLedger } from './components/ledger.js';
@@ -22,7 +23,7 @@ let teardowns = [];
 export function initAll() {
   // Verify expected mounting points exist
   assertDom([
-    'themeToggleBtn', 'soundToggleBtn', 'articlesGrid', 
+    'themeToggleBtn', 'soundToggleBtn', 'work', 'articlesGrid', 
     'forensicsTableBody', 'contactForm', 'caseModal'
   ]);
 
@@ -33,6 +34,7 @@ export function initAll() {
     initNavigation,
     initMasthead,
     initPortrait,
+    initRailway,
     initArticles,
     initLabReport,
     initLedger,

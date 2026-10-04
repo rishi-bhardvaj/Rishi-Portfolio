@@ -1,0 +1,185 @@
+/**
+ * Skills & Potion Cabinet Data
+ * Categorized technical inventory with levels, potion labels, and revelio disclosures.
+ */
+
+export const skillCategories = Object.freeze([
+  { id: 'all', label: 'All Substances' },
+  { id: 'backend', label: 'Backend' },
+  { id: 'frontend', label: 'Frontend' },
+  { id: 'database', label: 'Databases' },
+  { id: 'security', label: 'Security' },
+  { id: 'devops', label: 'DevOps' },
+  { id: 'cloud', label: 'Cloud' },
+  { id: 'aiml', label: 'AI/ML' }
+]);
+
+const rawSkills = [
+  {
+    id: 'java-spring',
+    name: 'Java 17 & Spring Boot 3',
+    code: 'SPRG',
+    category: 'backend',
+    categoryLabel: 'Backend',
+    level: 95,
+    levelType: 'primary',
+    detected: 'Most days',
+    finding: 'PRIMARY TOOL',
+    potionLabel: 'Draught of Concurrency',
+    bottleType: 'tall-flask',
+    color: '#d4af37',
+    description: 'Enterprise backend microservices, Finacle core, transactional banking workflows, multithreading & Spring Data JPA.'
+  },
+  {
+    id: 'ts-nest',
+    name: 'TypeScript & NestJS',
+    code: 'NEST',
+    category: 'backend',
+    categoryLabel: 'Backend',
+    level: 90,
+    levelType: 'primary',
+    detected: 'Most days',
+    finding: 'PRIMARY TOOL',
+    potionLabel: 'Elixir of Type-Safety',
+    bottleType: 'round-flask',
+    color: '#38bdf8',
+    description: 'High-throughput modular API engines, dependency injection, Prisma ORM, and scalable microservices.'
+  },
+  {
+    id: 'angular-react',
+    name: 'Angular & React',
+    code: 'UI',
+    category: 'frontend',
+    categoryLabel: 'Frontend',
+    level: 85,
+    levelType: 'comfortable',
+    detected: 'Full-stack UI',
+    finding: 'COMFORTABLE',
+    potionLabel: 'Philter of Modern UI',
+    bottleType: 'conical-flask',
+    color: '#f43f5e',
+    description: 'Component architecture, responsive state management, client dashboards, and Tailwind CSS design systems.'
+  },
+  {
+    id: 'postgres',
+    name: 'PostgreSQL',
+    code: 'PG',
+    category: 'database',
+    categoryLabel: 'Databases',
+    level: 92,
+    levelType: 'primary',
+    detected: 'In projects',
+    finding: 'PRIMARY TOOL',
+    potionLabel: 'Essence of ACID Relational',
+    bottleType: 'square-jar',
+    color: '#3b82f6',
+    description: 'Relational data modeling, ACID transactions, complex query tuning, indexing, and connection pooling.'
+  },
+  {
+    id: 'oracle',
+    name: 'Oracle DB & PL/SQL',
+    code: 'ORA',
+    category: 'database',
+    categoryLabel: 'Databases',
+    level: 90,
+    levelType: 'primary',
+    detected: 'Enterprise core',
+    finding: 'PRIMARY TOOL',
+    potionLabel: 'Extract of Enterprise Ledgers',
+    bottleType: 'tall-flask',
+    color: '#ea580c',
+    description: 'Finacle enterprise core storage, stored procedures, triggers, high-volume transactional schemas.'
+  },
+  {
+    id: 'prisma-mongo',
+    name: 'Prisma ORM & MongoDB',
+    code: 'PRIS',
+    category: 'database',
+    categoryLabel: 'Databases',
+    level: 85,
+    levelType: 'comfortable',
+    detected: 'In projects',
+    finding: 'COMFORTABLE',
+    potionLabel: 'Tincture of Data Schema',
+    bottleType: 'round-flask',
+    color: '#10b981',
+    description: 'Automated migrations, type-safe query generation, NoSQL document storage, flexible data access.'
+  },
+  {
+    id: 'auth-rbac',
+    name: 'OAuth2, JWT & SSO (RBAC)',
+    code: 'AUTH',
+    category: 'security',
+    categoryLabel: 'Security',
+    level: 92,
+    levelType: 'primary',
+    detected: 'Financial systems',
+    finding: 'PRIMARY TOOL',
+    potionLabel: 'Serum of Zero-Trust',
+    bottleType: 'dropper-vial',
+    color: '#a855f7',
+    description: 'Zero-trust authorization matrices, token rotation, cryptographic validation, and maker-checker audit guardrails.'
+  },
+  {
+    id: 'docker-k8s',
+    name: 'Docker & Containerization',
+    code: 'DCKR',
+    category: 'devops',
+    categoryLabel: 'DevOps',
+    level: 88,
+    levelType: 'comfortable',
+    detected: 'When needed',
+    finding: 'COMFORTABLE',
+    potionLabel: 'Solution of Portability',
+    bottleType: 'square-jar',
+    color: '#06b6d4',
+    description: 'Multi-stage Docker builds, image layer caching, local orchestration, containerized microservice clusters.'
+  },
+  {
+    id: 'jenkins-cicd',
+    name: 'Jenkins CI/CD Automation',
+    code: 'JNKS',
+    category: 'devops',
+    categoryLabel: 'DevOps',
+    level: 88,
+    levelType: 'comfortable',
+    detected: 'Pipeline optimization',
+    finding: 'COMFORTABLE',
+    potionLabel: 'Draft of Speed & Sharding',
+    bottleType: 'tall-flask',
+    color: '#f97316',
+    description: 'Automated test runner sharding, Docker layer caching, linting gates, 75% pipeline speed acceleration.'
+  },
+  {
+    id: 'cloud-oci',
+    name: 'AWS & Oracle Cloud (OCI)',
+    code: 'CLD',
+    category: 'cloud',
+    categoryLabel: 'Cloud',
+    level: 80,
+    levelType: 'training',
+    detected: 'Amplify • S3 • OCI',
+    finding: 'IN TRAINING',
+    potionLabel: 'Tonic of High Availability',
+    bottleType: 'conical-flask',
+    color: '#eab308',
+    description: 'Object storage, serverless lambdas, cloud compute instances, and infrastructure provisioning.'
+  },
+  {
+    id: 'python-ml',
+    name: 'Python & ML Models',
+    code: 'PY',
+    category: 'aiml',
+    categoryLabel: 'AI/ML',
+    level: 85,
+    levelType: 'comfortable',
+    detected: 'Research & scripts',
+    finding: 'COMFORTABLE',
+    potionLabel: 'Compound of Kinematic Vision',
+    bottleType: 'round-flask',
+    color: '#059669',
+    description: 'Computer vision, OpenCV, gait kinematic analysis, automated data ingestion and scripting.'
+  }
+];
+
+export const skills = Object.freeze(rawSkills.map(s => Object.freeze({ ...s })));

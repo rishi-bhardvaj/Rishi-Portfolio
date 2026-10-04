@@ -16,6 +16,7 @@ import { initModal } from './components/modal.js';
 import { initContact } from './components/contact.js';
 import { initBroom } from './components/broom.js';
 import { initOwl } from './components/owl.js';
+import { initSpellBar } from './components/spell-bar.js';
 import { assertDom } from './core/dom.js';
 
 let teardowns = [];
@@ -41,7 +42,8 @@ export function initAll() {
     initModal,
     initContact,
     initBroom,
-    initOwl
+    initOwl,
+    initSpellBar
   ];
 
   initializers.forEach(fn => {

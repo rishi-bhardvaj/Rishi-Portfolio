@@ -100,10 +100,203 @@
   }
 }
 
+/* Wingardium Levitation Hover Lift */
+@media (hover: hover) and (pointer: fine) {
+  [data-spell="wingardium"],
+  .sub-article-card:hover,
+  .potion-bottle:hover {
+    transform: translateY(-6px) rotate(0.4deg) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+}
+
+/* Expecto Patronum Silver Mist */
+.patronus-mist {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: radial-gradient(circle at 50% 50%, rgba(224, 242, 254, 0.35) 0%, rgba(186, 230, 253, 0.15) 45%, transparent 70%);
+  animation: patronusPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes patronusPulse {
+  0% { opacity: 0; transform: scale(0.6); }
+  30% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 35px #38bdf8); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+.patronus-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f0f9ff;
+  box-shadow: 0 0 14px 4px #7dd3fc, 0 0 28px 8px #0284c7;
+  animation: patronusParticleBurst 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes patronusParticleBurst {
+  0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+  100% { transform: translate(var(--px), var(--py)) scale(0); opacity: 0; }
+}
+
+/* Morsmordre Prank Overlay */
+.morsmordre-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 78, 59, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: morsmordreFadeIn 0.4s ease forwards;
+  transition: opacity 0.5s ease;
+}
+
+.morsmordre-overlay.fade-out {
+  opacity: 0;
+}
+
+@keyframes morsmordreFadeIn {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.morsmordre-content {
+  text-align: center;
+  color: #a7f3d0;
+}
+
+.morsmordre-skull-svg {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 16px auto;
+  filter: drop-shadow(0 0 25px #10b981);
+}
+
+.morsmordre-title {
+  font-family: var(--font-masthead);
+  font-size: 2.8rem;
+  letter-spacing: 0.15em;
+  color: #34d399;
+  text-shadow: 0 0 20px #059669;
+}
+
+.morsmordre-sub {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #ecfdf5;
+  margin-top: 6px;
+}
+
+/* Spellbook Popover Modal */
+.spellbook-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 14, 11, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.spellbook-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.spellbook-dossier {
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  background: var(--bg-parchment-light);
+  border: 2px solid var(--border-ink);
+  box-shadow: var(--shadow-broadsheet), 0 0 45px rgba(212, 175, 55, 0.25);
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.spellbook-header {
+  padding: 18px 24px;
+  border-bottom: 2px solid var(--border-ink);
+  background: var(--bg-parchment-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spellbook-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.spells-registry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.spell-registry-card {
+  padding: 12px;
+  background: var(--bg-parchment-card);
+  border: 1px solid var(--border-divider);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.spell-registry-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(176, 141, 60, 0.2);
+}
+
+.spell-kbd {
+  padding: 2px 6px;
+  background: #18120c;
+  color: #fef08a;
+  border: 1px solid var(--accent-gold);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.spellbook-footer {
+  padding: 12px 24px;
+  border-top: 1px solid var(--border-divider);
+  background: var(--bg-parchment-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (max-width: 640px) {
+  .spells-registry-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .magic-wand-wrapper,
   .spell-light-burst,
-  .wand-sparkle-star {
+  .wand-sparkle-star,
+  .patronus-mist,
+  .patronus-particle,
+  .morsmordre-overlay {
     animation: none !important;
     display: none !important;
   }

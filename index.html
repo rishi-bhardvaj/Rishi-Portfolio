@@ -42,11 +42,14 @@
   <link rel="stylesheet" href="assets/css/variables.css" />
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/components/hero.css" />
   <link rel="stylesheet" href="assets/css/components/spells.css" />
   <link rel="stylesheet" href="assets/css/components/railway.css" />
   <link rel="stylesheet" href="assets/css/components/route-map.css" />
   <link rel="stylesheet" href="assets/css/components/station.css" />
   <link rel="stylesheet" href="assets/css/components/dossier.css" />
+  <link rel="stylesheet" href="assets/css/components/lab-report.css" />
+  <link rel="stylesheet" href="assets/css/components/ledger.css" />
 </head>
 <body class="bg-[#e6dabf] text-[#16120b]">
 
@@ -579,9 +582,12 @@
                 <div id="charCount" class="char-counter">0 / 1000 characters</div>
               </div>
 
+              <!-- Honeypot anti-spam field -->
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
               <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border-divider)]">
                 <span class="font-mono text-[10px] text-[#766953] uppercase tracking-wider">USUALLY REPLIES WITHIN 24 HOURS</span>
-                <button type="submit" class="btn-ink">SEND THE OWL &rarr;</button>
+                <button type="submit" class="btn-ink">SEND OWL &rarr;</button>
               </div>
             </form>
           </div>

@@ -1,11 +1,12 @@
 /**
  * Moving Portrait Component
- * 3D perspective mouse tracking and vintage photo filter matrix.
+ * 3D perspective mouse tracking, vintage photo filter matrix, and ambient moving photograph loop.
  */
 
 import { prefersReducedMotion } from '../core/motion.js';
 
 let cleanups = [];
+let photoObserver = null;
 
 export function initPortrait() {
   const photoFrame = document.querySelector('.prophet-photo-frame');
@@ -14,7 +15,40 @@ export function initPortrait() {
 
   if (!photoFrame || !userImg) return () => {};
 
+  // Ambient moving photograph loop (paused when offscreen)
   if (!prefersReducedMotion) {
+    userImg.classList.add('photo-alive');
+
+    if ('IntersectionObserver' in window) {
+      photoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            userImg.style.animationPlayState = 'running';
+          } else {
+            userImg.style.animationPlayState = 'paused';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      photoObserver.observe(photoFrame);
+    }
+
+    // Floating Dust Motes Overlay
+    let dustWrap = photoFrame.querySelector('.photo-dust-overlay');
+    if (!dustWrap) {
+      dustWrap = document.createElement('div');
+      dustWrap.className = 'photo-dust-overlay';
+      dustWrap.setAttribute('aria-hidden', 'true');
+      dustWrap.innerHTML = `
+        <span class="photo-mote mote-a"></span>
+        <span class="photo-mote mote-b"></span>
+        <span class="photo-mote mote-c"></span>
+        <span class="photo-mote mote-d"></span>
+      `;
+      photoFrame.appendChild(dustWrap);
+    }
+
+    // 3D Perspective Tilt on Mouse Movement
     const onMouseMove = (e) => {
       const rect = photoFrame.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -36,6 +70,7 @@ export function initPortrait() {
     cleanups.push(() => photoFrame.removeEventListener('mouseleave', onMouseLeave));
   }
 
+  // Filter Switcher
   filterBtns.forEach(btn => {
     const onClick = () => {
       filterBtns.forEach(b => b.classList.remove('active'));
@@ -63,6 +98,10 @@ export function initPortrait() {
 }
 
 export function destroyPortrait() {
+  if (photoObserver) {
+    photoObserver.disconnect();
+    photoObserver = null;
+  }
   cleanups.forEach(fn => fn());
   cleanups = [];
 }

@@ -1,0 +1,96 @@
+/* ==========================================================================
+   THE CAREER LEDGER — TIMELINE & ACCORDION DOSSIER EXPANSION
+   ========================================================================== */
+
+.ledger-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 140px 220px 1fr;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--border-divider);
+  transition: background-color 0.2s ease;
+}
+
+.ledger-row:hover {
+  background-color: rgba(22, 18, 11, 0.02);
+}
+
+.ledger-period {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: bold;
+}
+
+.ledger-role-box {
+  padding-right: 12px;
+}
+
+.ledger-role-title {
+  font-family: var(--font-headline);
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: var(--text-ink);
+  margin: 0 0 4px 0;
+}
+
+.ledger-company {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--stamp-red);
+  font-weight: bold;
+}
+
+.ledger-desc {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0 0 10px 0;
+}
+
+.ledger-badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Zero-Thrash CSS Grid Accordion Expansion */
+.ledger-expandable-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.ledger-expandable-content.open {
+  grid-template-rows: 1fr;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-divider);
+}
+
+.ledger-expandable-inner {
+  min-height: 0;
+}
+
+.ledger-expand-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .ledger-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

@@ -31,10 +31,12 @@ export function initLedger() {
         <button class="ledger-expand-btn mt-3 text-xs font-mono font-bold text-[var(--stamp-red)] hover:underline flex items-center gap-1.5" aria-expanded="false" aria-controls="ledger-detail-${item.id}">
           <span>[+] EXPAND FORENSIC DOSSIER</span>
         </button>
-        <div id="ledger-detail-${item.id}" class="ledger-expandable-content hidden mt-3 pt-3 border-t border-dashed border-[var(--border-divider)]">
-          <ul class="space-y-1.5 text-xs font-sans text-[var(--text-ink)] list-disc list-inside">
-            ${item.details.map(d => `<li>${d}</li>`).join('')}
-          </ul>
+        <div id="ledger-detail-${item.id}" class="ledger-expandable-content" aria-hidden="true">
+          <div class="ledger-expandable-inner">
+            <ul class="space-y-1.5 text-xs font-sans text-[var(--text-ink)] list-disc list-inside">
+              ${item.details.map(d => `<li>${d}</li>`).join('')}
+            </ul>
+          </div>
         </div>
       </div>
     </article>
@@ -52,11 +54,13 @@ export function initLedger() {
 
       if (isExpanded) {
         btn.setAttribute('aria-expanded', 'false');
-        detailEl.classList.add('hidden');
+        detailEl.classList.remove('open');
+        detailEl.setAttribute('aria-hidden', 'true');
         if (span) span.textContent = '[+] EXPAND FORENSIC DOSSIER';
       } else {
         btn.setAttribute('aria-expanded', 'true');
-        detailEl.classList.remove('hidden');
+        detailEl.classList.add('open');
+        detailEl.setAttribute('aria-hidden', 'false');
         if (span) span.textContent = '[-] COLLAPSE FORENSIC DOSSIER';
       }
     };

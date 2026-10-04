@@ -1,9 +1,10 @@
 /**
- * The Laboratory Report & Forensics Inventory Component
- * Renders categorized technical inventory from data/skills.js with search and filter matrix.
+ * The Laboratory Report & Potion Cabinet Component
+ * Renders the 7-shelf Potion Cabinet alongside an accessible tabular forensics disclosure.
  */
 
 import { skills } from '../data/skills.js';
+import { playSfx } from '../core/audio.js';
 
 let cleanups = [];
 let currentCategory = 'all';
@@ -47,6 +48,7 @@ export function renderLabReport() {
   const tableBody = document.getElementById('forensicsTableBody');
   const mobileCardsContainer = document.getElementById('forensicsMobileCards');
   const countBadge = document.getElementById('skillCountBadge');
+  const stackSection = document.getElementById('stack');
 
   const filtered = skills.filter(skill => {
     const matchesCat = currentCategory === 'all' || 
@@ -67,6 +69,10 @@ export function renderLabReport() {
     countBadge.textContent = `${filtered.length} SUBSTANCES DETECTED`;
   }
 
+  // 1. Render Potion Cabinet (Inject before or wrap forensics table)
+  renderPotionCabinet(stackSection, filtered);
+
+  // 2. Render Forensics Table Fallback
   if (tableBody) {
     if (filtered.length === 0) {
       tableBody.innerHTML = `
@@ -109,6 +115,7 @@ export function renderLabReport() {
     }
   }
 
+  // 3. Render Forensics Mobile Cards
   if (mobileCardsContainer) {
     if (filtered.length === 0) {
       mobileCardsContainer.innerHTML = `
@@ -136,4 +143,124 @@ export function renderLabReport() {
       }).join('');
     }
   }
+}
+
+function renderPotionCabinet(stackSection, filteredSkills) {
+  if (!stackSection) return;
+
+  let cabinet = document.getElementById('potionCabinet');
+  if (!cabinet) {
+    cabinet = document.createElement('div');
+    cabinet.id = 'potionCabinet';
+    cabinet.className = 'potion-cabinet mb-8';
+
+    // Insert cabinet right above the forensics table
+    const tableContainer = stackSection.querySelector('.forensics-table-container');
+    if (tableContainer) {
+      tableContainer.parentNode.insertBefore(cabinet, tableContainer);
+    } else {
+      stackSection.appendChild(cabinet);
+    }
+  }
+
+  // 7 shelves definition
+  const shelfCategories = [
+    { id: 'backend', label: 'Backend Core' },
+    { id: 'frontend', label: 'Frontend UI' },
+    { id: 'database', label: 'Databases & Relational' },
+    { id: 'security', label: 'Security & Auth' },
+    { id: 'devops', label: 'DevOps & Infrastructure' },
+    { id: 'cloud', label: 'Cloud Systems' },
+    { id: 'aiml', label: 'AI & Research' }
+  ];
+
+  const populatedShelves = shelfCategories.map(shelf => {
+    const shelfItems = filteredSkills.filter(s => s.category === shelf.id);
+    if (shelfItems.length === 0) return '';
+
+    return `
+      <div class="potion-shelf">
+        <span class="shelf-label">${shelf.label}</span>
+        <div class="shelf-bottles-row">
+          ${shelfItems.map(skill => renderPotionBottle(skill)).join('')}
+        </div>
+      </div>
+    `;
+  }).filter(Boolean).join('');
+
+  cabinet.innerHTML = `
+    <div class="cabinet-header">
+      <div>
+        <span class="font-mono text-[10px] text-[#d4af37] font-bold tracking-widest uppercase">THE APOTHECARY</span>
+        <h3 class="cabinet-title">Potion Cabinet of Technical Mastery</h3>
+      </div>
+      <div class="font-mono text-xs text-[#b09e75]">Hover or tap phials for Revelio disclosure</div>
+    </div>
+    <div class="cabinet-shelves-grid">
+      ${populatedShelves || '<div class="text-center py-6 font-mono text-xs text-[#b09e75]">No potions currently brewed for this query.</div>'}
+    </div>
+  `;
+
+  // Attach acoustic clicks to potion bottles
+  cabinet.querySelectorAll('.potion-bottle').forEach(bottle => {
+    bottle.addEventListener('click', () => playSfx('wand'));
+  });
+}
+
+function renderPotionBottle(skill) {
+  const liquidFillY = 80 - (skill.level * 0.55); // Fill height calculation
+  return `
+    <div class="potion-bottle" tabindex="0" role="button" aria-label="${skill.name}: ${skill.potionLabel}">
+      <!-- Floating Revelio Card -->
+      <div class="potion-revelio-card">
+        <div class="revelio-card-title">${skill.name}</div>
+        <div class="font-mono text-[9px] text-[var(--stamp-red)] font-bold mb-1">${skill.potionLabel}</div>
+        <p class="revelio-card-desc">${skill.description}</p>
+        <div class="revelio-card-footer">
+          <span>Potency: <strong>${skill.level}%</strong></span>
+          <span class="text-[var(--stamp-red)] font-bold">${skill.finding}</span>
+        </div>
+      </div>
+
+      <!-- SVG Phial with Dynamic Liquid Level -->
+      <svg class="potion-phial-svg" viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="liquidGrad-${skill.id}" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="${skill.color}" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="${skill.color}" stop-opacity="0.6"/>
+          </linearGradient>
+          <linearGradient id="glassReflection" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+            <stop offset="40%" stop-color="#ffffff" stop-opacity="0.05"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.25"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Wooden Cork Stopper -->
+        <polygon points="24,4 36,4 34,14 26,14" fill="#8c5828" stroke="#4a280c" stroke-width="1"/>
+        <line x1="25" y1="8" x2="35" y2="8" stroke="#4a280c" stroke-width="0.75"/>
+
+        <!-- Glass Bottle Body Outline & Liquid Fill -->
+        <g>
+          <!-- Bottle Neck & Shoulder -->
+          <path d="M25,14 L35,14 L35,26 C48,32 52,48 52,65 C52,78 44,84 30,84 C16,84 8,78 8,65 C8,48 12,32 25,26 Z" 
+                fill="#14100c" 
+                stroke="#d4af37" 
+                stroke-width="1.5"/>
+
+          <!-- Dynamic Colored Liquid Level -->
+          <clipPath id="bottleClip-${skill.id}">
+            <path d="M25,14 L35,14 L35,26 C48,32 52,48 52,65 C52,78 44,84 30,84 C16,84 8,78 8,65 C8,48 12,32 25,26 Z"/>
+          </clipPath>
+          <rect x="0" y="${liquidFillY.toFixed(1)}" width="60" height="90" fill="url(#liquidGrad-${skill.id})" clip-path="url(#bottleClip-${skill.id})"/>
+
+          <!-- Glass Sheen Overlay -->
+          <path d="M12,45 C12,35 18,28 26,26 L26,16" stroke="url(#glassReflection)" stroke-width="2" stroke-linecap="round"/>
+        </g>
+      </svg>
+
+      <span class="potion-bottle-name">${skill.code}</span>
+      <span class="potion-bottle-label">${skill.level}%</span>
+    </div>
+  `;
 }

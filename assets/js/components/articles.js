@@ -112,7 +112,7 @@ export function renderArticles(categoryKey = 'all') {
           </div>
           <div class="article-footer-row">
             <span class="font-mono text-xs text-[#766953]">STATION ${item.number}</span>
-            <button class="btn-stamp-link" data-dossier-id="${item.id}">OPEN CASE FILE &rarr;</button>
+            <button class="btn-stamp-link" data-dossier-id="${item.id}" aria-label="Open case file for ${item.title}">OPEN CASE FILE &rarr;</button>
           </div>
         </div>
       </article>

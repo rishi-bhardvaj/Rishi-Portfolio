@@ -28,7 +28,10 @@ const rawSkills = [
     potionLabel: 'Draught of Concurrency',
     bottleType: 'tall-flask',
     color: '#d4af37',
-    description: 'Enterprise backend microservices, Finacle core, transactional banking workflows, multithreading & Spring Data JPA.'
+    description: 'Enterprise backend microservices, Finacle core, transactional banking workflows, multithreading & Spring Data JPA.',
+    since: 2021,
+    uses: ['finacle', 'clinic-compass'],
+    detail: 'My daily driver at EdgeVerve: transactional services, Spring Data JPA, concurrency control and the discipline banking correctness demands. I reach for it when a system has to be right before it is fast.'
   },
   {
     id: 'ts-nest',
@@ -43,7 +46,10 @@ const rawSkills = [
     potionLabel: 'Elixir of Type-Safety',
     bottleType: 'round-flask',
     color: '#38bdf8',
-    description: 'High-throughput modular API engines, dependency injection, Prisma ORM, and scalable microservices.'
+    description: 'High-throughput modular API engines, dependency injection, Prisma ORM, and scalable microservices.',
+    since: 2023,
+    uses: ['order-management', 'storefront-forge', 'ledgerly'],
+    detail: 'Strongly typed, modular APIs with dependency injection, guards and interceptors. My default for freelance backends: quick to ship, easy for the next developer to read.'
   },
   {
     id: 'angular-react',
@@ -58,7 +64,10 @@ const rawSkills = [
     potionLabel: 'Philter of Modern UI',
     bottleType: 'conical-flask',
     color: '#f43f5e',
-    description: 'Component architecture, responsive state management, client dashboards, and Tailwind CSS design systems.'
+    description: 'Component architecture, responsive state management, client dashboards, and Tailwind CSS design systems.',
+    since: 2022,
+    uses: ['finacle', 'storefront-forge', 'clinic-compass'],
+    detail: 'Component-driven front-ends with typed forms, lazy-loaded routes and server-side rendering where search visibility matters. Angular first, React when the project calls for it.'
   },
   {
     id: 'postgres',
@@ -73,7 +82,10 @@ const rawSkills = [
     potionLabel: 'Essence of ACID Relational',
     bottleType: 'square-jar',
     color: '#3b82f6',
-    description: 'Relational data modeling, ACID transactions, complex query tuning, indexing, and connection pooling.'
+    description: 'Relational data modeling, ACID transactions, complex query tuning, indexing, and connection pooling.',
+    since: 2022,
+    uses: ['order-management', 'clinic-compass', 'ledgerly'],
+    detail: 'Schema design, partial and composite indexes, query plans and migrations. The first thing I tune when a page feels slow.'
   },
   {
     id: 'oracle',
@@ -88,7 +100,10 @@ const rawSkills = [
     potionLabel: 'Extract of Enterprise Ledgers',
     bottleType: 'tall-flask',
     color: '#ea580c',
-    description: 'Finacle enterprise core storage, stored procedures, triggers, high-volume transactional schemas.'
+    description: 'Finacle enterprise core storage, stored procedures, triggers, high-volume transactional schemas.',
+    since: 2021,
+    uses: ['finacle'],
+    detail: 'PL/SQL packages, partitioning and tuning against ledgers with millions of rows. Enterprise-grade data work from the Finacle engagement.'
   },
   {
     id: 'prisma-mongo',
@@ -103,7 +118,10 @@ const rawSkills = [
     potionLabel: 'Tincture of Data Schema',
     bottleType: 'round-flask',
     color: '#10b981',
-    description: 'Automated migrations, type-safe query generation, NoSQL document storage, flexible data access.'
+    description: 'Automated migrations, type-safe query generation, NoSQL document storage, flexible data access.',
+    since: 2024,
+    uses: ['order-management', 'risheesh'],
+    detail: 'Prisma for type-safe relational access and automated migrations; MongoDB for flexible, document-shaped data like scraped listings.'
   },
   {
     id: 'auth-rbac',
@@ -118,7 +136,10 @@ const rawSkills = [
     potionLabel: 'Serum of Zero-Trust',
     bottleType: 'dropper-vial',
     color: '#a855f7',
-    description: 'Zero-trust authorization matrices, token rotation, cryptographic validation, and maker-checker audit guardrails.'
+    description: 'Zero-trust authorization matrices, token rotation, cryptographic validation, and maker-checker audit guardrails.',
+    since: 2022,
+    uses: ['finacle', 'order-management', 'clinic-compass'],
+    detail: 'OAuth2 flows, JWT rotation, SSO and fine-grained role-based access. Security designed in from the first endpoint, not bolted on at the end.'
   },
   {
     id: 'docker-k8s',
@@ -133,7 +154,10 @@ const rawSkills = [
     potionLabel: 'Solution of Portability',
     bottleType: 'square-jar',
     color: '#06b6d4',
-    description: 'Multi-stage Docker builds, image layer caching, local orchestration, containerized microservice clusters.'
+    description: 'Multi-stage Docker builds, image layer caching, local orchestration, containerized microservice clusters.',
+    since: 2023,
+    uses: ['devops-forge', 'storefront-forge'],
+    detail: 'Reproducible builds, small images and Kubernetes deployments with health checks and rolling updates, so releases stop being events.'
   },
   {
     id: 'jenkins-cicd',
@@ -148,7 +172,10 @@ const rawSkills = [
     potionLabel: 'Draft of Speed & Sharding',
     bottleType: 'tall-flask',
     color: '#f97316',
-    description: 'Automated test runner sharding, Docker layer caching, linting gates, 75% pipeline speed acceleration.'
+    description: 'Automated test runner sharding, Docker layer caching, linting gates, 75% pipeline speed acceleration.',
+    since: 2023,
+    uses: ['devops-forge', 'ledgerly'],
+    detail: 'Pipelines with layer caching, test sharding and quality gates. The route from a 120-minute build to 30 minutes.'
   },
   {
     id: 'cloud-oci',
@@ -163,7 +190,10 @@ const rawSkills = [
     potionLabel: 'Tonic of High Availability',
     bottleType: 'conical-flask',
     color: '#eab308',
-    description: 'Object storage, serverless lambdas, cloud compute instances, and infrastructure provisioning.'
+    description: 'Object storage, serverless lambdas, cloud compute instances, and infrastructure provisioning.',
+    since: 2024,
+    uses: ['devops-forge'],
+    detail: 'Object storage, serverless functions and compute on AWS and Oracle Cloud. Currently deepening infrastructure-as-code practice.'
   },
   {
     id: 'python-ml',
@@ -178,8 +208,65 @@ const rawSkills = [
     potionLabel: 'Compound of Kinematic Vision',
     bottleType: 'round-flask',
     color: '#059669',
-    description: 'Computer vision, OpenCV, gait kinematic analysis, automated data ingestion and scripting.'
+    description: 'Computer vision, OpenCV, gait kinematic analysis, automated data ingestion and scripting.',
+    since: 2023,
+    uses: ['vision-lab', 'risheesh'],
+    detail: 'Computer vision with OpenCV, signal processing for the gait research paper, and automation scripts that quietly do the boring work.'
+  },
+  {
+    id: 'rest-design',
+    name: 'REST API Design & OpenAPI',
+    code: 'REST',
+    category: 'backend',
+    categoryLabel: 'Backend',
+    level: 93,
+    levelType: 'primary',
+    detected: 'Every project',
+    finding: 'PRIMARY TOOL',
+    potionLabel: 'Elixir of Clean Contracts',
+    bottleType: 'decanter',
+    color: '#2dd4bf',
+    description: 'Resource modelling, versioning, pagination, error contracts and OpenAPI docs that front-end teams actually enjoy.',
+    since: 2021,
+    uses: ['finacle', 'order-management', 'storefront-forge', 'clinic-compass', 'ledgerly'],
+    detail: 'A good API is a promise. I design resources, error shapes and pagination first, document them in OpenAPI, then build, so clients can start integrating in week one.'
+  },
+  {
+    id: 'payments-webhooks',
+    name: 'Stripe Payments & Webhooks',
+    code: 'PAY',
+    category: 'backend',
+    categoryLabel: 'Backend',
+    level: 82,
+    levelType: 'comfortable',
+    detected: 'Client projects',
+    finding: 'COMFORTABLE',
+    potionLabel: 'Philter of Idempotency',
+    bottleType: 'round-flask',
+    color: '#f472b6',
+    description: 'Checkout, subscriptions and signed-webhook reconciliation that never double-charges or double-books.',
+    since: 2024,
+    uses: ['storefront-forge', 'order-management', 'ledgerly'],
+    detail: 'Money code must survive retries. Signed webhooks, idempotency keys and a reconciliation job mean a flaky network can never create a duplicate order.'
+  },
+  {
+    id: 'redis-queues',
+    name: 'Redis & Job Queues',
+    code: 'RDS',
+    category: 'database',
+    categoryLabel: 'Databases',
+    level: 80,
+    levelType: 'comfortable',
+    detected: 'Background work',
+    finding: 'COMFORTABLE',
+    potionLabel: 'Draught of Swift Memory',
+    bottleType: 'conical-flask',
+    color: '#ef4444',
+    description: 'Caching, distributed locks and queue-backed background jobs for reminders, invoices and digests.',
+    since: 2024,
+    uses: ['order-management', 'ledgerly'],
+    detail: 'Caches for the hot path, queues for everything that does not need to block a request: reminders, recurring invoices, nightly syncs.'
   }
 ];
 
-export const skills = Object.freeze(rawSkills.map(s => Object.freeze({ ...s })));
+export const skills = Object.freeze(rawSkills.map(s => Object.freeze({ ...s, uses: Object.freeze([...(s.uses || [])]) })));

@@ -6,6 +6,7 @@
 import { spells, getSpellById } from '../data/spells.js';
 import { playSfx } from '../core/audio.js';
 import { showToast } from '../core/dom.js';
+import { castLabel } from '../core/incantation.js';
 import { store } from '../core/store.js';
 import { applyTheme } from './theme.js';
 import { openCaseModal, closeCaseModal } from './modal.js';
@@ -80,7 +81,7 @@ export function castSpell(spellId, ctx = {}) {
   const sfxType = spell ? spell.sfx : 'wand';
 
   playSfx(sfxType);
-  showToast(`⚡ ${incantation}!`);
+  castLabel(String(incantation).toUpperCase());
 
   switch (spellId) {
     case 'lumos':
@@ -195,7 +196,7 @@ function triggerMorsmordre() {
         <path d="M48 60 L50 56 L52 60 Z" fill="#064e3b"/>
       </svg>
       <div class="morsmordre-title">MORSMORDRE</div>
-      <p class="morsmordre-sub">Just kidding. Hire him instead.</p>
+      <p class="morsmordre-sub">Just kidding. Work with him instead.</p>
     </div>
   `;
   document.body.appendChild(overlay);

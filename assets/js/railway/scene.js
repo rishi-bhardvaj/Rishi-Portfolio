@@ -3,13 +3,13 @@
  * Assembles the stage: world, track, train, foreground, route map, station card, HUD, walkthrough drawer and the platform gate.
  */
 
-import { worldMarkup, foregroundMarkup, trainMarkup } from './art.js';
+import { worldMarkup, foregroundMarkup, trainMarkup, tilesFor } from './art.js';
 import { routeMapMarkup } from './route-map.js';
 import { escapeHtml as esc } from '../core/dom.js';
 
-const PUFFS = 6;
-const EMBERS = 9;
-const MOTES = 10;
+const PUFFS = 5;
+const EMBERS = 6;
+const MOTES = 6;
 
 /** Deterministic spread so ambient particles never bunch up. */
 const spread = (i, min, max) => (min + ((i * 0.618034 + 0.13) % 1) * (max - min)).toFixed(1);
@@ -30,10 +30,13 @@ export function signsMarkup(stations) {
 }
 
 export function createSceneMarkup(stations) {
+  const width = window.innerWidth || 1440;
+  const tiles = tilesFor(width);
+  const small = width < 720;
   return `
     <div class="railway-stage" id="railwayStage" data-state="idle">
       <div class="world" id="railwayWorld">
-        ${worldMarkup()}
+        ${worldMarkup(tiles, small)}
         <div class="signs-strip" id="signsStrip">${signsMarkup(stations)}</div>
       </div>
 
@@ -48,7 +51,7 @@ export function createSceneMarkup(stations) {
         <div class="steam" aria-hidden="true">${Array.from({ length: PUFFS }, (_, i) => `<i style="--k:${i}"></i>`).join('')}</div>
       </div>
 
-      ${foregroundMarkup()}
+      ${foregroundMarkup(tiles)}
 
       <div class="apron" aria-hidden="true"><div class="apron-seams" id="apronSeams"></div></div>
 

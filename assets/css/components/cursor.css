@@ -1,66 +1,65 @@
-/**
- * INTERACTIVE WAND CURSOR STYLES
- * Delicate golden wand-tip follower and starlight spark particles.
- * Enabled only on fine-pointer devices with motion permitted.
- */
+/* ==========================================================================
+   WAND CURSOR & INCANTATION LABELS
+   The wand's glowing tip (top-left of the artwork) is the pointer hotspot.
+   Only enabled on fine pointers; the native cursor stays over text fields.
+   ========================================================================== */
 
-.wand-cursor-dot {
+html.wand-on, html.wand-on * { cursor: none !important; }
+html.wand-on :is(input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea, [contenteditable="true"]) { cursor: text !important; }
+
+.wand-cursor {
   position: fixed;
   top: 0;
   left: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #fffdf0 0%, #f59e0b 60%, rgba(217, 119, 6, 0.8) 100%);
-  box-shadow: 
-    0 0 8px 2px rgba(245, 158, 11, 0.6),
-    0 0 16px 4px rgba(234, 179, 8, 0.25);
+  z-index: 100000;
+  width: 40px;
+  height: 40px;
+  margin: -6px 0 0 -6px; /* tip centre (6,6) sits exactly on the pointer */
   pointer-events: none;
-  z-index: 99999;
-  transform: translate3d(-50%, -50%, 0);
-  transition: width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
-  will-change: transform;
   opacity: 0;
+  will-change: transform;
+  transition: opacity 0.2s ease;
 }
-
-.wand-cursor-dot.active {
-  opacity: 1;
-}
-
-.wand-cursor-dot.hovering {
-  width: 14px;
-  height: 14px;
-  background: radial-gradient(circle, #ffffff 0%, #fbbf24 60%, rgba(245, 158, 11, 0.9) 100%);
-  box-shadow: 
-    0 0 12px 3px rgba(245, 158, 11, 0.85),
-    0 0 24px 6px rgba(251, 191, 36, 0.45);
-}
+.wand-cursor.is-visible { opacity: 1; }
+.wand-cursor.is-text { opacity: 0; }
+.wand-cursor svg { display: block; overflow: visible; transform-origin: 6px 6px; transition: transform 0.18s cubic-bezier(0.3, 1.6, 0.5, 1); filter: drop-shadow(0 2px 2px rgba(20, 10, 0, 0.35)); }
+.wand-cursor .wd-glow { transform-origin: 6px 6px; transform: scale(0.8); opacity: 0.75; transition: transform 0.2s, opacity 0.2s; }
+.wand-cursor.is-hover svg { transform: rotate(-12deg) scale(1.12); }
+.wand-cursor.is-hover .wd-glow { transform: scale(1.9); opacity: 1; }
+.wand-cursor.is-down svg { transform: rotate(8deg) scale(0.92); }
+.wand-cursor.is-down .wd-glow { transform: scale(2.4); }
+.wand-cursor .wd-star { transform-origin: 6px 6px; animation: wandTwinkle 1.8s ease-in-out infinite; }
+@keyframes wandTwinkle { 50% { transform: scale(0.82) rotate(20deg); } }
 
 .wand-spark {
   position: fixed;
-  pointer-events: none;
-  z-index: 99998;
+  z-index: 99999;
   border-radius: 50%;
-  background: #fef08a;
-  box-shadow: 0 0 6px 1px #eab308;
-  animation: sparkDrift 0.45s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+  background: #fff1a8;
+  box-shadow: 0 0 7px 2px rgba(245, 180, 40, 0.8);
+  pointer-events: none;
+  opacity: 0;
 }
 
-@keyframes sparkDrift {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, 0px))) scale(0.2);
-  }
+/* Floating spell words */
+.spell-float {
+  position: fixed;
+  z-index: 100001;
+  transform: translate(-50%, -34px);
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff3b8;
+  text-shadow: 0 0 6px rgba(255, 190, 60, 0.95), 0 0 18px rgba(255, 150, 20, 0.7), 0 1px 0 rgba(60, 30, 0, 0.8);
+  pointer-events: none;
 }
 
-/* If user prefers reduced motion or is on touch screen, hide wand cursor elements completely */
-@media (prefers-reduced-motion: reduce), (pointer: coarse) {
-  .wand-cursor-dot,
-  .wand-spark {
-    display: none !important;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .wand-cursor .wd-star { animation: none; }
+  .wand-cursor svg, .wand-cursor .wd-glow { transition: none; }
+}
+@media (pointer: coarse) {
+  .wand-cursor, .wand-spark { display: none !important; }
 }

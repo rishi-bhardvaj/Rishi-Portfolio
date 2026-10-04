@@ -15,7 +15,7 @@
   width: min(440px, calc(100% - 28px));
   padding: 20px 22px 16px;
   color: #16120b;
-  background: linear-gradient(180deg, var(--bg-card, #f8f3e8), #efe4c8);
+  background: linear-gradient(180deg, #e6d4a6, #dcc89a);
   border: 2px solid #16120b;
   box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.85), 0 24px 50px rgba(0, 0, 0, 0.6), inset 0 0 36px rgba(120, 86, 38, 0.18);
   will-change: transform, opacity;
@@ -39,7 +39,7 @@
 .sc-title { margin: 0 0 10px; font-family: var(--font-headline); font-style: italic; font-size: 0.95rem; color: #5a4733; }
 .sc-summary { margin: 0 0 12px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--font-serif); font-size: 1rem; line-height: 1.5; color: #3b2f22; }
 .sc-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; padding: 0; list-style: none; }
-.sc-chips li, .dw-chips li { padding: 3px 9px; font: 700 10px var(--font-mono); letter-spacing: 0.04em; background: #efe4c8; border: 1px solid #16120b; }
+.sc-chips li, .dw-chips li { padding: 3px 9px; font: 700 10px var(--font-mono); letter-spacing: 0.04em; background: #dcc89a; border: 1px solid #16120b; }
 .sc-chips li.more { background: transparent; border-style: dashed; color: #766953; }
 .sc-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .sc-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(22, 18, 11, 0.4); }
@@ -78,7 +78,7 @@
   bottom: 0;
   width: min(660px, 100%);
   color: #16120b;
-  background: linear-gradient(180deg, var(--bg-card, #f8f3e8), #efe4c8);
+  background: linear-gradient(180deg, #e6d4a6, #dcc89a);
   border-left: 3px solid #16120b;
   box-shadow: -30px 0 80px rgba(0, 0, 0, 0.6), inset 10px 0 30px rgba(120, 86, 38, 0.15);
   transform: translate3d(104%, 0, 0);
@@ -106,7 +106,7 @@
 .dw-label em { margin-left: auto; font: italic 400 0.85rem var(--font-headline); letter-spacing: 0; text-transform: none; color: #766953; }
 .dw-h { margin: 0 0 6px; font-family: var(--font-headline); font-weight: 700; font-size: 1.3rem; }
 .dw-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.dw-chips li { padding: 6px 12px; font-size: 11px; background: linear-gradient(180deg, #f8f3e8, #e9dcb8); box-shadow: 0 2px 0 rgba(22, 18, 11, 0.25); }
+.dw-chips li { padding: 6px 12px; font-size: 11px; background: linear-gradient(180deg, #e9d9ae, #e9dcb8); box-shadow: 0 2px 0 rgba(22, 18, 11, 0.25); }
 
 .dw-steps { counter-reset: step; margin: 14px 0 0; padding: 0; list-style: none; }
 .dw-steps li { position: relative; counter-increment: step; padding: 0 0 16px 44px; font: 500 13px/1.45 var(--font-mono); color: #2d2418; }

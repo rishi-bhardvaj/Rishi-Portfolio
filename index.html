@@ -11,7 +11,10 @@
   <!-- Primary Meta Tags -->
   <meta name="title" content="Rishi Bhardvaj • Software Engineer & Backend Architect" />
   <meta name="description" content="The Broadsheet Edition portfolio of Rishi Bhardvaj — Software Engineer at EdgeVerve (Infosys) building enterprise banking backends and high-throughput distributed systems." />
-  <meta name="theme-color" content="#e6dabf" />
+  <meta name="theme-color" content="#d3bd88" />
+  <!-- Optional: play your own licensed track instead of the built-in original music-box theme.
+       Put the file in assets/audio/ and uncomment:
+  <meta name="music-file" content="assets/audio/theme.mp3" /> -->
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
@@ -29,10 +32,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Pirata One, Cinzel Decorative, Playfair Display, Space Mono, Newsreader, Inter -->
+  <!-- Fonts: MedievalSharp (headings), EB Garamond (body), Space Mono (tiny technical labels) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel+Decorative:wght@700;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=MedievalSharp&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   
   <!-- GSAP 3 & ScrollTrigger CDN -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -43,6 +46,7 @@
   <link rel="stylesheet" href="assets/css/base.css" />
   <link rel="stylesheet" href="assets/css/styles.css" />
   <link rel="stylesheet" href="assets/css/components/hero.css" />
+  <link rel="stylesheet" href="assets/css/components/services.css" />
   <link rel="stylesheet" href="assets/css/components/spells.css" />
   <link rel="stylesheet" href="assets/css/components/railway.css" />
   <link rel="stylesheet" href="assets/css/components/route-map.css" />
@@ -52,9 +56,10 @@
   <link rel="stylesheet" href="assets/css/components/ledger.css" />
   <link rel="stylesheet" href="assets/css/components/marauder.css" />
   <link rel="stylesheet" href="assets/css/components/cursor.css" />
+  <link rel="stylesheet" href="assets/css/components/owl.css" />
   <link rel="stylesheet" href="assets/css/components/eggs.css" />
 </head>
-<body class="bg-[#e6dabf] text-[#16120b]">
+<body>
 
   <!-- TOP VINTAGE NAVIGATION -->
   <header class="vintage-navbar">
@@ -69,15 +74,16 @@
       <!-- Desktop Navigation Links -->
       <nav class="nav-links-desktop">
         <a href="#work" class="nav-link">WORK</a>
+        <a href="#services" class="nav-link">SERVICES</a>
         <a href="#stack" class="nav-link">STACK</a>
         <a href="#ledger" class="nav-link">LEDGER</a>
         <a href="#contact" class="nav-link">CONTACT</a>
       </nav>
 
-      <!-- Action Controls (Music, Sound, Theme, Hire CTA, Mobile Hamburger) -->
+      <!-- Action Controls (Music, Sound, Theme, Work-with-me CTA, Mobile Hamburger) -->
       <div class="nav-controls">
         <!-- Ambient Audio Toggle -->
-        <button id="musicToggleBtn" class="nav-icon-btn hidden" aria-label="Ambient Audio Toggle" title="Ambient Sound">
+        <button id="musicToggleBtn" class="nav-icon-btn" aria-label="Play background music" title="Music: enchanted theme" aria-pressed="false">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
         </button>
 
@@ -92,7 +98,7 @@
         </button>
 
         <!-- Direct CTA -->
-        <a href="#contact" class="btn-ink hidden sm:inline-flex">HIRE HIM</a>
+        <a href="#contact" class="btn-ink cta-work hidden sm:inline-flex">WORK WITH ME</a>
 
         <!-- Mobile Hamburger Toggle Button -->
         <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Open Mobile Menu">
@@ -124,16 +130,20 @@
           <span>01. Selected Work</span>
           <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
         </a>
+        <a href="#services" class="mobile-nav-link">
+          <span>02. Commissions Open</span>
+          <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
+        </a>
         <a href="#stack" class="mobile-nav-link">
-          <span>02. The Lab Report</span>
+          <span>03. The Lab Report</span>
           <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
         </a>
         <a href="#ledger" class="mobile-nav-link">
-          <span>03. Career Ledger</span>
+          <span>04. Career Ledger</span>
           <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
         </a>
         <a href="#contact" class="mobile-nav-link">
-          <span>04. Submit an Owl</span>
+          <span>05. Submit an Owl</span>
           <span class="font-mono text-xs text-[var(--stamp-red)]">&rarr;</span>
         </a>
       </nav>
@@ -143,7 +153,7 @@
       <div class="flex items-center justify-between">
         <span class="font-mono text-xs text-[var(--text-muted)]">THEME &bull; MUSIC</span>
         <div class="flex gap-2">
-          <button id="mobileMusicToggleBtn" class="nav-icon-btn hidden" aria-label="Music Toggle" title="Ambient Audio">
+          <button id="mobileMusicToggleBtn" class="nav-icon-btn" aria-label="Play background music" title="Music" aria-pressed="false">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
           </button>
           <button id="mobileSoundToggleBtn" class="nav-icon-btn" aria-label="Sound Toggle" title="Sound FX">
@@ -170,7 +180,8 @@
         <span class="ticker-item"><strong>&bull; SPEED:</strong> Jenkins CI/CD execution times reduced by 75% via layer caching &amp; test sharding.</span>
         <span class="ticker-item"><strong>&bull; PUBLICATION:</strong> Peer-reviewed behavioral gait tracking research paper indexed in IJRPR.</span>
         <span class="ticker-item"><strong>&bull; ARCHITECTURE:</strong> NestJS high-throughput marketplace engine deployed with zero downtime.</span>
-        <span class="ticker-item"><strong>&bull; STATUS:</strong> Distributed backend desk currently open for high-impact contracts in 2026.</span>
+        <span class="ticker-item"><strong>&bull; STATUS:</strong> Freelance desk open: backend, full-stack and DevOps commissions for 2026.</span>
+        <span class="ticker-item"><strong>&bull; COMMISSIONS:</strong> Storefronts, booking portals and invoicing tools shipped for independent clients.</span>
         <!-- Duplicate for continuous loop -->
         <span class="ticker-item"><strong>&bull; DISPATCH:</strong> 79 Mission-Critical defects cleared across Finacle Enterprise Core Banking.</span>
         <span class="ticker-item"><strong>&bull; SPEED:</strong> Jenkins CI/CD execution times reduced by 75% via layer caching &amp; test sharding.</span>
@@ -317,6 +328,11 @@
             <span class="stamp-distressed text-xs">79 DEFECTS RESOLVED &bull; VERIFIED</span>
           </div>
 
+          <div class="hero-cta-row">
+            <a href="#contact" class="btn-ink cta-work">WORK WITH ME &rarr;</a>
+            <a href="#work" class="btn-outline-ink">BOARD THE RAILWAY</a>
+          </div>
+
           <!-- Interactive Photo Filter Mode Switcher -->
           <div class="photo-filter-controls" aria-label="Photo Filter Mode">
             <button class="photo-filter-btn active" data-filter="default">Broadsheet</button>
@@ -376,6 +392,7 @@
         </div>
         <div class="filter-tabs-list">
           <button class="filter-tab-btn active" data-category="all">All Dispatches</button>
+          <button class="filter-tab-btn" data-category="freelance">Freelance</button>
           <button class="filter-tab-btn" data-category="banking">Core Banking</button>
           <button class="filter-tab-btn" data-category="cloud">Full-Stack &amp; Cloud</button>
           <button class="filter-tab-btn" data-category="devops">DevOps &amp; Speed</button>
@@ -386,6 +403,59 @@
       <!-- Dynamic Sub-Articles Grid -->
       <div id="articlesGrid" class="sub-articles-grid">
         <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- 3.3 CLASSIFIEDS: COMMISSIONS OPEN (FREELANCE SERVICES) -->
+    <section id="services" class="services-section pt-6 pb-10 border-t-2 border-[var(--border-ink)]">
+      <div class="broadsheet-section-header">
+        <div class="broadsheet-subhead">
+          <span>CLASSIFIEDS // COMMISSIONS OPEN</span>
+          <span class="svc-open"><i></i>ACCEPTING NEW PROJECTS &mdash; 2026</span>
+        </div>
+        <h2 class="broadsheet-title">Work With Me</h2>
+        <div class="broadsheet-rule"></div>
+      </div>
+
+      <p class="svc-lede">Independent engineer for hire. I build and ship backends, web apps and delivery pipelines for founders, agencies and small teams &mdash; the same discipline I apply to enterprise banking systems, scoped for your budget.</p>
+
+      <div class="svc-grid">
+        <article class="svc-card" tabindex="0">
+          <span class="svc-no">№ 01</span>
+          <h3>Backend &amp; API Engineering</h3>
+          <p>Java / Spring Boot or NestJS services, REST APIs, OAuth2 &amp; JWT auth, role-based access, PostgreSQL or Oracle schemas that survive growth.</p>
+          <ul><li>API design &amp; docs</li><li>Auth &amp; RBAC</li><li>Performance tuning</li></ul>
+        </article>
+        <article class="svc-card" tabindex="0">
+          <span class="svc-no">№ 02</span>
+          <h3>Full-Stack Web Apps</h3>
+          <p>Angular and TypeScript front-ends wired to a clean API: storefronts, booking portals, admin dashboards and internal tools.</p>
+          <ul><li>E-commerce &amp; payments</li><li>Dashboards</li><li>Booking systems</li></ul>
+        </article>
+        <article class="svc-card" tabindex="0">
+          <span class="svc-no">№ 03</span>
+          <h3>DevOps &amp; Delivery</h3>
+          <p>Docker, Kubernetes and Jenkins pipelines that make deploys boring: caching, test sharding and zero-downtime releases.</p>
+          <ul><li>CI/CD pipelines</li><li>Containerisation</li><li>Monitoring</li></ul>
+        </article>
+        <article class="svc-card" tabindex="0">
+          <span class="svc-no">№ 04</span>
+          <h3>Automation &amp; Integrations</h3>
+          <p>Scrapers, job and report pipelines, third-party APIs and webhooks &mdash; the tedious work turned into something that runs itself.</p>
+          <ul><li>Data pipelines</li><li>Stripe &amp; webhooks</li><li>Scheduled digests</li></ul>
+        </article>
+      </div>
+
+      <ol class="svc-process" aria-label="How a project runs">
+        <li><b>1</b><span>Brief<small>a short call or an owl</small></span></li>
+        <li><b>2</b><span>Scope &amp; quote<small>fixed price or weekly</small></span></li>
+        <li><b>3</b><span>Build in drops<small>demo every week</small></span></li>
+        <li><b>4</b><span>Handover<small>docs, support, warranty</small></span></li>
+      </ol>
+
+      <div class="svc-cta">
+        <a href="#contact" class="btn-ink cta-work">WORK WITH ME &rarr;</a>
+        <a href="#archives" class="btn-outline-ink">SEE THE CASE FILES</a>
       </div>
     </section>
 
@@ -411,16 +481,14 @@
             class="lab-search-input"
           />
         </div>
-        <div class="lab-category-pills">
-          <button class="lab-pill-btn active" data-category="all">All Substances</button>
-          <button class="lab-pill-btn" data-category="backend">Backend</button>
-          <button class="lab-pill-btn" data-category="database">Databases</button>
-          <button class="lab-pill-btn" data-category="devops">Cloud &amp; DevOps</button>
-          <button class="lab-pill-btn" data-category="security">Security</button>
-          <button class="lab-pill-btn" data-category="ui">UI &amp; Full-Stack</button>
-        </div>
+        <div class="lab-category-pills" id="labPills" role="group" aria-label="Filter by discipline"></div>
       </div>
 
+      <!-- Potion cabinet + specimen panel (rendered by components/lab-report.js) -->
+      <div id="labWorkbench" class="lab-workbench" aria-live="polite"></div>
+
+      <details class="forensics-details-toggle">
+        <summary>OPEN THE FULL LAB REPORT (TABLE)</summary>
       <!-- Forensics Table for Desktop / Tablet -->
       <div class="forensics-table-container">
         <table class="forensics-table">
@@ -442,6 +510,7 @@
       <div id="forensicsMobileCards" class="forensics-cards-grid">
         <!-- Dynamically injected -->
       </div>
+      </details>
 
       <div class="mt-3 text-right font-mono text-[11px] text-[#766953]">
         Findings are illustrative &mdash; technical substances detected across active engineering duty.
@@ -553,7 +622,7 @@
       <div class="broadsheet-section-header">
         <div class="broadsheet-subhead">
           <span>SUBMIT AN OWL // DISPATCH</span>
-          <span>THE DESK IS OPEN FOR SELECT WORK &mdash; 2026</span>
+          <span>THE DESK IS OPEN FOR FREELANCE WORK &mdash; 2026</span>
         </div>
         <h2 class="broadsheet-title">Letters &amp; Commissions</h2>
         <div class="broadsheet-rule"></div>
@@ -567,7 +636,7 @@
           <div>
             <h3 class="font-headline text-2xl sm:text-3xl text-[var(--text-ink)] font-bold mb-2">Put it in writing</h3>
             <p class="font-sans text-sm text-[var(--text-muted)] mb-5">
-              A project in mind, a role to fill, or just a good question &mdash; send it through and he&rsquo;ll get back to you.
+              A product to build, a system to fix, or just a good question &mdash; send it through and he&rsquo;ll get back to you within a day.
             </p>
 
             <form id="contactForm" class="space-y-4">
@@ -703,7 +772,7 @@
         <!-- Column 1: Bio Deck -->
         <div class="space-y-3">
           <p class="font-sans text-sm text-[#b09e75] leading-relaxed font-light">
-            A software engineer in Bangalore, India. Building robust distributed banking backends at EdgeVerve (Infosys) and engineering high-throughput architectures. This broadsheet is hand-set in Pirata One, Playfair Display, and Space Mono.
+            A software engineer in Bangalore, India. Building robust distributed banking backends at EdgeVerve (Infosys) and engineering high-throughput architectures. This broadsheet is hand-set in MedievalSharp, EB Garamond, and Space Mono.
           </p>
         </div>
 

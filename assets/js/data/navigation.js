@@ -21,6 +21,14 @@ export const navSections = Object.freeze([
     icon: 'train'
   },
   {
+    id: 'services',
+    label: 'CLASSIFIEDS',
+    fullName: 'Commissions Open',
+    sub: 'Services & Work With Me',
+    mapPos: { x: 50, y: 40 },
+    icon: 'quill'
+  },
+  {
     id: 'stack',
     label: 'LABORATORY',
     fullName: 'The Lab Report & Potions',

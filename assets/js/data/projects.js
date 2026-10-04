@@ -71,7 +71,6 @@ const rawProjects = [
     id: 'finacle',
     order: 1,
     station: 'FINACLE CORE',
-    number: '01',
     category: 'Enterprise Banking Core',
     categoryKey: 'banking',
     title: 'Finacle FNPR Enterprise Banking Core',
@@ -123,9 +122,8 @@ const rawProjects = [
   },
   {
     id: 'order-management',
-    order: 2,
+    order: 3,
     station: 'ORDER MANAGEMENT',
-    number: '02',
     category: 'Full Stack & OMS',
     categoryKey: 'fullstack',
     title: 'EventGo High-Concurrency OMS Engine',
@@ -177,9 +175,8 @@ const rawProjects = [
   },
   {
     id: 'risheesh',
-    order: 3,
+    order: 5,
     station: 'RISHEESH',
-    number: '03',
     category: 'Automation & Intelligence',
     categoryKey: 'automation',
     title: 'Risheesh Autonomous Job Intelligence',
@@ -231,9 +228,8 @@ const rawProjects = [
   },
   {
     id: 'devops-forge',
-    order: 4,
+    order: 7,
     station: 'DEVOPS FORGE',
-    number: '04',
     category: 'DevOps & Infrastructure',
     categoryKey: 'devops',
     title: 'Enterprise CI/CD Acceleration Forge',
@@ -285,9 +281,8 @@ const rawProjects = [
   },
   {
     id: 'vision-lab',
-    order: 5,
+    order: 8,
     station: 'VISION LAB',
-    number: '05',
     category: 'Research & Vision',
     categoryKey: 'research',
     title: 'Gait Analysis of Human Behaviour (IJRPR)',
@@ -339,9 +334,8 @@ const rawProjects = [
   },
   {
     id: 'marauders-archive',
-    order: 6,
+    order: 9,
     station: "MARAUDER'S ARCHIVE",
-    number: '06',
     category: 'Experimental Systems',
     categoryKey: 'experimental',
     title: "Marauder's Interactive Engineering Sandbox",
@@ -393,9 +387,8 @@ const rawProjects = [
   },
   {
     id: 'room-of-requirement',
-    order: 7,
+    order: 99,
     station: 'ROOM OF REQUIREMENT',
-    number: '07',
     category: 'Secret Vault',
     categoryKey: 'experimental',
     title: 'Secret Experimental Sandbox & AST Transformer',
@@ -446,6 +439,141 @@ const rawProjects = [
       accent: '#ec4899',
       lantern: '#f472b6'
     }
+  },
+  {
+    id: 'storefront-forge',
+    order: 2,
+    station: 'STOREFRONT FORGE',
+    category: 'Freelance E-Commerce',
+    categoryKey: 'freelance',
+    title: 'Storefront Forge: Boutique E-Commerce Platform',
+    summary: 'A custom storefront and admin for an independent boutique: catalogue with variants, Stripe checkout, order tracking and inventory sync, replacing marketplace fees with a brand the client owns.',
+    description: 'DEMO CASE FILE. Replace with your real client work. Freelance engagement: designed and built a headless e-commerce platform for a growing boutique that was losing margin to marketplace fees and had no control over branding, stock or customer data.',
+    status: 'shipped',
+    isDemo: true,
+    featured: false,
+    hidden: false,
+    technologies: ['Angular', 'NestJS', 'TypeScript', 'PostgreSQL', 'Stripe', 'Docker', 'JWT'],
+    spell: {
+      heading: 'The Marketplace Fee Trap',
+      body: 'Marketplace commissions were eating the margin, product pages looked like everyone else\u2019s, and stock levels drifted out of sync across channels.'
+    },
+    incantation: {
+      heading: 'Headless Commerce Pipeline',
+      body: 'An Angular storefront with server-side rendering for search visibility, talking to a NestJS API that owns catalogue, cart, orders and inventory.',
+      steps: [
+        'Server-rendered Angular storefront with variant-aware product pages',
+        'NestJS REST API: catalogue, cart, orders, admin',
+        'Stripe Checkout with signed-webhook order reconciliation',
+        'Nightly inventory sync and low-stock email alerts'
+      ]
+    },
+    result: {
+      summary: 'Placeholder impact figures. Swap in the client\u2019s real numbers.',
+      metrics: [
+        { label: 'Largest Contentful Paint', value: '1.4s' },
+        { label: 'Checkout Conversion', value: '+22%' },
+        { label: 'Marketplace Fees', value: '0' },
+        { label: 'Admin Time Saved', value: '60%' }
+      ]
+    },
+    artifacts: [
+      { src: 'assets/images/projects/storefront-forge.svg', alt: 'Storefront Forge product page and admin dashboard', caption: 'Storefront with variant picker and the order admin' }
+    ],
+    reveal: 'The biggest win was boring: idempotent webhook handling meant a double-fired Stripe event could never create a double order.',
+    github: null,
+    demo: null,
+    theme: { sky: '#1c1008', accent: '#e8a33a', lantern: '#ffb703' }
+  },
+  {
+    id: 'clinic-compass',
+    order: 4,
+    station: 'CLINIC COMPASS',
+    category: 'Freelance Healthcare',
+    categoryKey: 'freelance',
+    title: 'Clinic Compass: Appointment & Patient Portal',
+    summary: 'Online booking and a role-based portal for a multi-doctor clinic: patients self-book, doctors see their day, admins manage slots, and every record view is audit-logged.',
+    description: 'DEMO CASE FILE. Replace with your real client work. Freelance engagement: replaced phone-tag scheduling with a secure booking system, including reminders and a full audit trail for patient data access.',
+    status: 'shipped',
+    isDemo: true,
+    featured: false,
+    hidden: false,
+    technologies: ['Java 17', 'Spring Boot 3', 'Angular', 'PostgreSQL', 'OAuth2', 'RBAC', 'Docker'],
+    spell: {
+      heading: 'Phone-Tag Scheduling',
+      body: 'Receptionists juggled calls and a paper diary: double-bookings, forgotten follow-ups and no record of who had opened a patient file.'
+    },
+    incantation: {
+      heading: 'Slot Engine with a Paper Trail',
+      body: 'A conflict-free slot engine behind role-scoped APIs, with reminders queued off the request path and every sensitive read written to an audit log.',
+      steps: [
+        'OAuth2 login with patient, doctor and admin roles',
+        'Slot engine with optimistic locking to prevent double-booking',
+        'Queued SMS and email reminders',
+        'Append-only audit log for every record view'
+      ]
+    },
+    result: {
+      summary: 'Placeholder impact figures. Swap in the client\u2019s real numbers.',
+      metrics: [
+        { label: 'No-Shows', value: '-38%' },
+        { label: 'Booking Time', value: '45s' },
+        { label: 'Access Roles', value: '3' },
+        { label: 'Audit Coverage', value: '100%' }
+      ]
+    },
+    artifacts: [
+      { src: 'assets/images/projects/clinic-compass.svg', alt: 'Clinic Compass booking calendar and doctor schedule', caption: 'Slot picker for patients and the doctor day view' }
+    ],
+    reveal: 'Optimistic locking on the slot row, not a distributed lock, was enough: two people clicking the same 10:30 slot simply get a friendly "just taken" message.',
+    github: null,
+    demo: null,
+    theme: { sky: '#081a1c', accent: '#4fd1c5', lantern: '#9be7de' }
+  },
+  {
+    id: 'ledgerly',
+    order: 6,
+    station: 'LEDGERLY',
+    category: 'Freelance SaaS',
+    categoryKey: 'freelance',
+    title: 'Ledgerly: Invoicing & Expense Dashboard',
+    summary: 'A lean invoicing and cash-flow tool for small businesses: recurring invoices, payment reminders, expense capture and one-click PDF and CSV reports.',
+    description: 'DEMO CASE FILE. Replace with your real client work. Freelance engagement: built a multi-tenant invoicing SaaS so a small agency could stop chasing payments in spreadsheets.',
+    status: 'in-progress',
+    isDemo: true,
+    featured: false,
+    hidden: false,
+    technologies: ['NestJS', 'TypeScript', 'PostgreSQL', 'Redis', 'Jenkins', 'Docker', 'REST API'],
+    spell: {
+      heading: 'The Spreadsheet Ledger',
+      body: 'Invoices lived in spreadsheets, reminders were manual, and nobody could answer "who owes us what?" without an afternoon of work.'
+    },
+    incantation: {
+      heading: 'Tenant-Safe Billing Core',
+      body: 'A multi-tenant NestJS core with row-level tenant scoping, cached dashboards and background jobs for recurring invoices and reminders.',
+      steps: [
+        'Tenant-scoped data model with row-level checks',
+        'Recurring invoice scheduler on a Redis-backed queue',
+        'Automated payment reminders with escalation rules',
+        'PDF and CSV report generation on demand'
+      ]
+    },
+    result: {
+      summary: 'Placeholder impact figures. Swap in the client\u2019s real numbers.',
+      metrics: [
+        { label: 'Invoice Generation', value: '0.4s' },
+        { label: 'Overdue Invoices', value: '-31%' },
+        { label: 'Report Formats', value: '2' },
+        { label: 'Uptime', value: '99.9%' }
+      ]
+    },
+    artifacts: [
+      { src: 'assets/images/projects/ledgerly.svg', alt: 'Ledgerly cash-flow dashboard and invoice list', caption: 'Cash-flow dashboard with overdue invoices flagged' }
+    ],
+    reveal: 'Caching the dashboard aggregates per tenant, invalidated by invoice events, took the home screen from seconds to instant on large accounts.',
+    github: null,
+    demo: null,
+    theme: { sky: '#0f1620', accent: '#7aa2f7', lantern: '#b4ccff' }
   }
 ];
 
@@ -466,9 +594,10 @@ export function unlockSecretStation() {
 // Run dev-time validation
 rawProjects.forEach(validateProject);
 
-export const projects = Object.freeze(rawProjects.map(p => {
+export const projects = Object.freeze([...rawProjects].sort((a, b) => a.order - b.order).map((p, idx) => {
   const base = {
     ...p,
+    number: String(idx + 1).padStart(2, '0'),
     technologies: Object.freeze([...p.technologies]),
     spell: Object.freeze({ ...p.spell }),
     incantation: Object.freeze({

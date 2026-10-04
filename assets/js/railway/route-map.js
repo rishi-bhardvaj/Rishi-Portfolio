@@ -8,7 +8,7 @@ import { escapeHtml as esc } from '../core/dom.js';
 export function routeMapMarkup(stations) {
   const n = stations.length;
   return `
-    <nav class="route-map" id="routeMap" aria-label="Railway route map" style="--n:${n}">
+    <nav class="route-map${n > 7 ? ' many' : ''}" id="routeMap" aria-label="Railway route map" style="--n:${n}">
       <div class="rm-head">
         <span class="rm-title">RISHI'S WIZARDING RAILWAY</span>
         <span class="rm-tag" id="routeTag">EXPRESS LINE &bull; ${String(n).padStart(2, '0')} STATIONS</span>

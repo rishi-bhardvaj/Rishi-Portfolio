@@ -87,6 +87,12 @@ if (typeof document !== 'undefined') {
   window.addEventListener('keydown', onGesture, { passive: true });
 }
 
+/** Shared Web Audio context + master bus (created lazily; call from a user gesture). */
+export function getAudioEngine() {
+  const ctx = ensureContext();
+  return ctx ? { ctx, master: masterGain } : null;
+}
+
 export function isSoundActive() {
   return isSoundEnabled;
 }

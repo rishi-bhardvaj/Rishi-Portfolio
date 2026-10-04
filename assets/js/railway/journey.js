@@ -21,6 +21,7 @@ const START_T = -0.55; // where the platform sign rests before boarding
 const BOARDED_KEY = 'railway_boarded';
 const DEG = 180 / Math.PI;
 const CRANK = 24; // coupling-rod crank radius in train SVG units
+const BIG_WHEEL = 44;
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const wrap = (v, m) => ((v % m) + m) % m;
@@ -33,6 +34,15 @@ const writeBoarded = () => { try { sessionStorage.setItem(BOARDED_KEY, 'true'); 
 /** @type {null | Record<string, any>} */
 let S = null;
 
+/** Writes translateX only when it changed by at least a quarter pixel. */
+function setX(item, x) {
+  const el = item.el || item;
+  const v = Math.round(x * 4) / 4;
+  if (el.__x === v) return;
+  el.__x = v;
+  el.style.transform = `translate3d(${v}px,0,0)`;
+}
+
 /* ---------------------------------------------------------------- lifecycle */
 
 export function startJourney(mount) {
@@ -40,11 +50,21 @@ export function startJourney(mount) {
     mount, stations: [], el: {}, layers: [],
     t: START_T, rawT: START_T, idx: -1, D: 1400, scale: 1,
     boarded: readBoarded(), boarding: false, locked: false, inView: false,
-    drawerOpen: false, opener: null, releaseTrap: null,
+    mounted: false, drawerOpen: false, opener: null, releaseTrap: null, wheels: [], rod: null,
     gctx: null, st: null, cancel: null, moveTimer: 0, moving: false, lastOff: 0, cardAway: null,
     cleanups: [],
   };
-  mountScene();
+  // Build the (heavy) scene only when it is about to be seen. A boarded session mounts immediately so
+  // the pin spacer exists before anchor links compute their scroll targets.
+  if (S.boarded) {
+    mountScene();
+  } else {
+    const lazy = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { lazy.disconnect(); if (S && !S.mounted) mountScene(); }
+    }, { rootMargin: '900px 0px' });
+    lazy.observe(mount);
+    S.lazy = lazy;
+  }
 
   const onUnlock = () => rebuild();
   window.addEventListener('chronicle:secret-unlocked', onUnlock);
@@ -55,6 +75,7 @@ export function startJourney(mount) {
 
 export function destroyJourney() {
   if (!S) return;
+  S.lazy?.disconnect();
   teardownScene();
   S.persistent.forEach((fn) => fn());
   stopTrainChug();
@@ -62,6 +83,8 @@ export function destroyJourney() {
 }
 
 function teardownScene() {
+  if (!S.mounted) return;
+  S.mounted = false;
   S.cancel?.();
   S.gctx?.revert();
   S.gctx = null;
@@ -74,6 +97,7 @@ function teardownScene() {
 }
 
 function mountScene() {
+  S.mounted = true;
   S.stations = getStations();
   S.mount.innerHTML = createSceneMarkup(S.stations);
   const q = (id) => document.getElementById(id);
@@ -84,6 +108,12 @@ function mountScene() {
     svg: S.mount.querySelector('.train-svg'),
   };
   S.layers = [...S.mount.querySelectorAll('.world-layer')].map((el) => ({ el, speed: parseFloat(el.dataset.speed) }));
+  S.wheels = [...S.mount.querySelectorAll('.wheel')].map((el) => ({ el, r: parseFloat(el.dataset.r) }));
+  S.rod = S.mount.querySelector('.rod');
+  S.sign = S.el.signs;
+  S.sleep = S.el.sleepers;
+  S.seam = S.el.seams;
+  S.progress = S.cardOp = S.cardShift = S.rodX = S.rodY = null;
   S.idx = -1;
   S.drawerOpen = false;
   S.cardAway = null;
@@ -104,7 +134,7 @@ function mountScene() {
 
 /** Re-render everything when the station list changes (e.g. the hidden station unlocks). */
 function rebuild() {
-  if (!S) return;
+  if (!S || !S.mounted) return;
   const keep = clamp(S.idx, 0, 1e9);
   const wasBoarded = S.boarded;
   teardownScene();
@@ -120,6 +150,7 @@ function rebuild() {
 /* ---------------------------------------------------------------- measuring & rendering */
 
 function measure() {
+  if (!S.mounted) return;
   const w = S.el.stage.clientWidth || window.innerWidth;
   S.D = Math.max(1100, w * 1.15);
   S.el.stage.style.setProperty('--d', `${S.D}px`);
@@ -136,25 +167,29 @@ function render(t, silent = false) {
   s.t = t;
 
   const off = t * s.D;
-  for (const l of s.layers) l.el.style.transform = `translate3d(${-wrap(off * l.speed, TILE)}px,0,0)`;
-  s.el.signs.style.transform = `translate3d(${-off}px,0,0)`;
-  s.el.sleepers.style.transform = `translate3d(${-wrap(off, 70)}px,0,0)`;
-  s.el.seams.style.transform = `translate3d(${-wrap(off, 180)}px,0,0)`;
+  for (const l of s.layers) setX(l, -wrap(off * l.speed, TILE));
+  setX(s.sign, -off);
+  setX(s.sleep, -wrap(off, 70));
+  setX(s.seam, -wrap(off, 180));
 
-  // Wheels turn with the ground; the coupling rod follows the big wheels' crank pins.
-  const px = off / s.scale; // distance in train units
-  const lg = px / 44;
-  const svg = s.el.svg.style;
-  svg.setProperty('--wa-lg', `${(wrap(lg * DEG, 360)).toFixed(1)}deg`);
-  svg.setProperty('--wa-md', `${(wrap((px / 26) * DEG, 360)).toFixed(1)}deg`);
-  svg.setProperty('--wa-sm', `${(wrap((px / 21) * DEG, 360)).toFixed(1)}deg`);
-  svg.setProperty('--rx', `${(CRANK * Math.sin(lg)).toFixed(2)}px`);
-  svg.setProperty('--ry', `${(CRANK * (1 - Math.cos(lg))).toFixed(2)}px`);
+  // Wheels are separate compositor layers: rotating them never repaints the train artwork.
+  const px = off / s.scale; // distance travelled, in train SVG units
+  for (const w of s.wheels) {
+    const deg = Math.round(wrap((px / w.r) * DEG, 360) * 2) / 2; // half-degree steps: no redundant writes
+    if (deg !== w.deg) { w.deg = deg; w.el.style.transform = `rotate(${deg}deg)`; }
+  }
+  if (s.rod) {
+    const a = px / BIG_WHEEL;
+    const rx = Math.round(CRANK * Math.sin(a) * s.scale * 2) / 2;
+    const ry = Math.round(CRANK * (1 - Math.cos(a)) * s.scale * 2) / 2;
+    if (rx !== s.rodX || ry !== s.rodY) { s.rodX = rx; s.rodY = ry; s.rod.style.transform = `translate3d(${rx}px,${ry}px,0)`; }
+  }
 
   markMoving(off);
 
   const n = s.stations.length;
-  setRouteProgress(s.el.map, n > 1 ? clamp(t / (n - 1), 0, 1) : 0);
+  const progress = n > 1 ? Math.round(clamp(t / (n - 1), 0, 1) * 1000) / 1000 : 0;
+  if (progress !== s.progress) { s.progress = progress; setRouteProgress(s.el.map, progress); }
 
   if (!s.boarded) return;
   const near = Math.round(t);
@@ -165,8 +200,14 @@ function render(t, silent = false) {
   const d = Math.abs(t - near);
   const o = clamp(1 - (d - 0.1) / 0.22, 0, 1);
   const away = o < 0.6;
-  s.el.card.style.opacity = o.toFixed(3);
-  s.el.card.style.transform = `translate3d(${((near - t) * 70).toFixed(1)}px,0,0)`;
+  const shift = Math.round((near - t) * 70);
+  const op = Math.round(o * 100) / 100;
+  if (op !== s.cardOp || shift !== s.cardShift) {
+    s.cardOp = op;
+    s.cardShift = shift;
+    s.el.card.style.opacity = op;
+    s.el.card.style.transform = `translate3d(${shift}px,0,0)`;
+  }
   if (away !== s.cardAway) {
     s.cardAway = away;
     s.el.card.classList.toggle('is-away', away);
@@ -272,6 +313,7 @@ async function alignToStage() {
 }
 
 export async function board({ instant = false } = {}) {
+  if (S && !S.mounted) mountScene();
   const s = S;
   if (!s || s.boarded || s.boarding) return;
   s.boarding = true;
@@ -299,6 +341,7 @@ export async function board({ instant = false } = {}) {
 }
 
 export function goToStation(i) {
+  if (S && !S.mounted) mountScene();
   const s = S;
   if (!s) return;
   const last = s.stations.length - 1;
@@ -327,7 +370,7 @@ export const currentStation = () => (S ? S.stations[S.idx] || null : null);
 
 export function toggleProtego(force) {
   const s = S;
-  if (!s || !s.boarded) return;
+  if (!s || !s.mounted || !s.boarded) return;
   s.locked = typeof force === 'boolean' ? force : !s.locked;
   s.el.protego.setAttribute('aria-pressed', String(s.locked));
   s.el.protego.classList.toggle('active', s.locked);
@@ -338,7 +381,7 @@ export function toggleProtego(force) {
 
 export function toggleRevelio() {
   const s = S;
-  if (!s || !s.boarded) return false;
+  if (!s || !s.mounted || !s.boarded) return false;
   if (!s.drawerOpen) openDrawer();
   const box = s.el.drawer.querySelector('#dwReveal');
   if (!box) return false;
@@ -356,7 +399,7 @@ export const isDrawerOpen = () => !!S && S.drawerOpen;
 
 export function openDrawer() {
   const s = S;
-  if (!s || !s.boarded || s.idx < 0) return;
+  if (!s || !s.mounted || !s.boarded || s.idx < 0) return;
   s.opener = document.activeElement;
   s.drawerOpen = true;
   const p = s.stations[s.idx];
@@ -373,7 +416,7 @@ export function openDrawer() {
 /** @returns {boolean} whether a drawer was actually closed */
 export function closeDrawer() {
   const s = S;
-  if (!s || !s.drawerOpen) return false;
+  if (!s || !s.mounted || !s.drawerOpen) return false;
   s.drawerOpen = false;
   s.el.drawer.setAttribute('aria-hidden', 'true');
   delete s.el.stage.dataset.drawer;
@@ -407,9 +450,13 @@ function bindInput() {
   });
 
   // Only react to keys while the railway is on screen so the rest of the page keeps its arrow keys.
-  const io = new IntersectionObserver(([entry]) => { s.inView = entry.intersectionRatio > 0.5; }, { threshold: [0, 0.5, 1] });
+  const io = new IntersectionObserver(([entry]) => {
+    s.inView = entry.intersectionRatio > 0.5;
+    stage.classList.toggle('is-offscreen', !entry.isIntersecting); // pauses ambient CSS animations
+    document.documentElement.classList.toggle('railway-live', entry.intersectionRatio > 0.2);
+  }, { threshold: [0, 0.5, 1] });
   io.observe(stage);
-  s.cleanups.push(() => io.disconnect());
+  s.cleanups.push(() => { io.disconnect(); document.documentElement.classList.remove('railway-live'); });
 
   add(window, 'keydown', (e) => {
     if (!s.inView || e.ctrlKey || e.metaKey || e.altKey) return;

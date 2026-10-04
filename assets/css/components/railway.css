@@ -84,13 +84,12 @@
 }
 .world-layer svg { flex: none; width: 1600px; height: 100%; display: block; }
 
-.layer-far    { bottom: calc(var(--apron-h) + 18px); height: clamp(280px, 56svh, 620px); }
-.layer-hills  { bottom: calc(var(--apron-h) + 18px); height: clamp(120px, 25svh, 270px); }
-.layer-forest { bottom: calc(var(--apron-h) + 18px); height: clamp(90px, 20svh, 210px); }
-.layer-poles  { bottom: calc(var(--apron-h) + 18px); height: clamp(150px, 31svh, 310px); }
+.layer-backdrop  { bottom: calc(var(--apron-h) + 18px); height: clamp(300px, 62svh, 680px); }
+.layer-trees     { bottom: calc(var(--apron-h) + 18px); height: clamp(150px, 31svh, 330px); }
 .layer-foreground { bottom: calc(var(--apron-h) - 4px); height: clamp(280px, 54svh, 580px); }
 
 .world-mist {
+  contain: strict;
   position: absolute;
   left: 0;
   right: 0;
@@ -172,6 +171,7 @@
 
 /* ---------- train ---------- */
 .train-rig {
+  contain: layout;
   position: absolute;
   right: clamp(1%, 4vw, 6%);
   bottom: calc(var(--apron-h) + 16px - var(--train-h) * 0.0348);
@@ -196,11 +196,8 @@
   50% { transform: translate3d(0, -1.4px, 0) rotate(0.07deg); }
 }
 .train-svg { position: relative; z-index: 1; display: block; width: 100%; height: 100%; overflow: visible; }
-.train-svg .w-lg { transform: rotate(var(--wa-lg, 0deg)); }
-.train-svg .w-md { transform: rotate(var(--wa-md, 0deg)); }
-.train-svg .w-sm { transform: rotate(var(--wa-sm, 0deg)); }
-.train-svg .rod  { transform: translate(var(--rx, 0px), var(--ry, 0px)); }
-.train-svg .headlamp { filter: drop-shadow(0 0 7px #ffe9a8); }
+.train-wheels { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.train-wheels .wheel, .train-wheels .rod { position: absolute; display: block; will-change: transform; }
 .train-plate { font: 700 9.5px "Space Mono", monospace; letter-spacing: 0.04em; fill: #f1d58a; }
 
 .steam { position: absolute; z-index: 2; left: 93.2%; top: 3%; width: 0; height: 0; opacity: 0.55; transition: opacity 0.6s; pointer-events: none; }
@@ -224,7 +221,6 @@
 }
 
 /* ---------- lamps ---------- */
-.lamp-halo { mix-blend-mode: screen; }
 .lamp-a .lamp-halo { animation: flicker 3.1s ease-in-out infinite alternate; }
 .lamp-b .lamp-halo { animation: flicker 2.3s ease-in-out infinite alternate-reverse 0.6s; }
 @keyframes flicker { 0%, 100% { opacity: 1; } 22% { opacity: 0.78; } 46% { opacity: 0.96; } 71% { opacity: 0.7; } }
@@ -371,7 +367,7 @@
   width: min(580px, calc(100% - 32px));
   padding: clamp(22px, 3.4vw, 40px) clamp(20px, 3.4vw, 44px);
   text-align: center;
-  background: linear-gradient(180deg, var(--bg-card, #f8f3e8), #efe4c8);
+  background: linear-gradient(180deg, #e6d4a6, #dcc89a);
   color: #16120b;
   border: 2px solid #16120b;
   box-shadow: 0 0 0 5px rgba(201, 162, 74, 0.9), 0 30px 70px rgba(0, 0, 0, 0.65), inset 0 0 40px rgba(120, 86, 38, 0.2);
@@ -402,7 +398,7 @@
 .gt-btn:hover i { transform: translateX(4px); }
 @keyframes ticketPulse { 0%, 100% { box-shadow: 0 0 0 2px #2a0710, 0 8px 22px rgba(94, 15, 29, 0.5); } 50% { box-shadow: 0 0 0 2px #2a0710, 0 8px 30px rgba(212, 175, 55, 0.55); } }
 .gt-note { margin-top: 16px; font: 10px var(--font-mono); letter-spacing: 0.1em; color: #766953; }
-.gt-note kbd { padding: 1px 6px; border: 1px solid #7a6641; background: #efe4c8; font: inherit; }
+.gt-note kbd { padding: 1px 6px; border: 1px solid #7a6641; background: #dcc89a; font: inherit; }
 .gt-note a { color: inherit; text-underline-offset: 3px; }
 
 [data-state="departing"] .gate-left { transform: translate3d(-101%, 0, 0); }
@@ -425,7 +421,7 @@
   .gate-right .gate-crest { left: -42px; }
   .world-moon { right: 8%; top: 20%; }
   .luggage { display: none; }
-  .layer-far { height: clamp(220px, 44svh, 420px); }
+  .layer-backdrop { height: clamp(240px, 50svh, 460px); }
 }
 @media (max-height: 640px) and (orientation: landscape) {
   .railway-stage { --train-h: 36svh; min-height: 440px; }
@@ -434,7 +430,14 @@
 /* ---------- motion preferences & FINITE ---------- */
 body.fx-off .railway-stage *, body.fx-off .railway-stage *::before { animation-play-state: paused !important; }
 @media (prefers-reduced-motion: reduce) {
-  .train-rig, .steam i, .ember, .mote, .star.twinkle, .world-mist span, .lamp-halo, .world-cloud, .gt-btn, .hud-wheel::after { animation: none !important; }
+  .train-rig, .steam i, .ember, .mote, .star.twinkle, .world-mist::before, .lamp-halo, .gt-btn, .hud-wheel::after { animation: none !important; }
   .ember, .mote { display: none; }
   .gate-leaf, .gate-ticket, .platform-gate { transition-duration: 0.2s !important; }
 }
+
+/* Nothing animates while the railway is off screen */
+.is-offscreen *, .is-offscreen *::before { animation-play-state: paused !important; }
+#work.railway { min-height: calc(100svh - 64px); }
+
+/* While the train is moving, only the essentials animate: pause the ambient layers */
+.is-moving .world-mist::before, .is-moving .ember, .is-moving .mote, .is-moving .star.twinkle, .is-moving .lamp-halo { animation-play-state: paused; }

@@ -142,7 +142,7 @@ export const spells = Object.freeze([
     keys: ['morsmordre'],
     where: 'Global Easter Egg',
     sfx: 'chime',
-    description: 'Summons a fleeting, harmless green skull in the clouds. Hire him instead.'
+    description: 'Summons a fleeting, harmless green skull in the clouds. Work with him instead.'
   }
 ].map(s => Object.freeze({
   ...s,

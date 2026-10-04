@@ -1,165 +1,133 @@
 /**
- * Interactive Wand Cursor Component
- * Adds subtle luminous wand-tip dot following pointer and spark particles on click.
- * Strictly respects prefers-reduced-motion and pointer: fine.
+ * Wand Cursor
+ * A small, cute wand replaces the pointer on fine-pointer devices. The glowing tip is the hotspot.
+ * Hovering interactive things makes the tip flare; clicking releases sparks. Sparks come from a fixed pool
+ * (Web Animations API), and the wand moves with a single transform write per frame.
+ * Disabled on touch screens. Falls back to the native cursor over text fields and when JS is off.
  */
 
 import { prefersReducedMotion } from '../core/motion.js';
 
-let cursorDot = null;
-let rafId = null;
-let isRunning = false;
-let cleanups = [];
+const SPARKS = 14;
+const TRAIL_STEP = 22; // px of travel between trail sparks
+const INTERACTIVE = 'a, button, [role="button"], summary, label, select, .rm-node, .potion-bottle, .svc-card, [data-spell], [tabindex="0"]';
+const TEXTUAL = 'input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea, [contenteditable="true"]';
 
-let targetX = -100;
-let targetY = -100;
-let currentX = -100;
-let currentY = -100;
-let isFiniteSuppressed = false;
+const WAND_SVG = `
+  <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">
+    <defs>
+      <linearGradient id="wdWood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9824a"/><stop offset=".55" stop-color="#7a4a22"/><stop offset="1" stop-color="#4a2a12"/></linearGradient>
+      <radialGradient id="wdTip"><stop offset="0" stop-color="#fffbe0"/><stop offset=".45" stop-color="#ffe27a"/><stop offset="1" stop-color="#ffb703" stop-opacity="0"/></radialGradient>
+    </defs>
+    <line x1="9" y1="9" x2="34" y2="34" stroke="#2a1608" stroke-width="5.4" stroke-linecap="round"/>
+    <line x1="9" y1="9" x2="34" y2="34" stroke="url(#wdWood)" stroke-width="3.6" stroke-linecap="round"/>
+    <line x1="9.8" y1="8.2" x2="31" y2="29.4" stroke="#e8b97e" stroke-width=".9" stroke-linecap="round" opacity=".7"/>
+    <g stroke="#e8c76a" stroke-width="1.6" stroke-linecap="round"><line x1="22.2" y1="20.2" x2="24.2" y2="22.2" transform="translate(-1.3 1.3)"/><line x1="27.4" y1="25.4" x2="29.4" y2="27.4" transform="translate(-1.3 1.3)"/></g>
+    <circle cx="33.4" cy="33.4" r="2.4" fill="#e8c76a" stroke="#6b4a10" stroke-width=".6"/>
+    <circle cx="6" cy="6" r="9" fill="url(#wdTip)" class="wd-glow"/>
+    <path d="M6,0.6 L7.5,4.5 L11.4,6 L7.5,7.5 L6,11.4 L4.5,7.5 L0.6,6 L4.5,4.5Z" fill="#fffbe0" stroke="#ffc533" stroke-width=".5" class="wd-star"/>
+  </svg>`;
+
+let wand = null;
+let sparks = [];
+let sparkIdx = 0;
+let cleanups = [];
+let raf = 0;
+let x = -100;
+let y = -100;
+let lastTrail = { x: 0, y: 0 };
+let suppressed = false;
 
 export function initCursor() {
-  // Guard: Touch devices or reduced motion
-  if (typeof window === 'undefined') return () => {};
-  const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (!hasFinePointer || prefersReducedMotion) {
-    return () => {};
-  }
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (!fine) return () => {};
 
-  // Create dot element
-  cursorDot = document.createElement('div');
-  cursorDot.className = 'wand-cursor-dot';
-  cursorDot.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(cursorDot);
+  wand = document.createElement('div');
+  wand.className = 'wand-cursor';
+  wand.setAttribute('aria-hidden', 'true');
+  wand.innerHTML = WAND_SVG;
+  document.body.appendChild(wand);
+  sparks = Array.from({ length: SPARKS }, () => {
+    const s = document.createElement('i');
+    s.className = 'wand-spark';
+    s.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(s);
+    return s;
+  });
+  document.documentElement.classList.add('wand-on');
 
-  // Mouse move handler
-  const onPointerMove = (e) => {
-    targetX = e.clientX;
-    targetY = e.clientY;
-    if (!cursorDot.classList.contains('active')) {
-      cursorDot.classList.add('active');
+  const frame = () => {
+    raf = 0;
+    wand.style.transform = `translate3d(${x}px,${y}px,0)`;
+  };
+  const on = (target, type, fn, opts) => {
+    target.addEventListener(type, fn, opts);
+    cleanups.push(() => target.removeEventListener(type, fn, opts));
+  };
+
+  on(window, 'pointermove', (e) => {
+    if (e.pointerType === 'touch') return;
+    x = e.clientX;
+    y = e.clientY;
+    if (!raf) raf = requestAnimationFrame(frame);
+    wand.classList.add('is-visible');
+    if (!prefersReducedMotion && !suppressed && Math.hypot(x - lastTrail.x, y - lastTrail.y) > TRAIL_STEP) {
+      lastTrail = { x, y };
+      emit(x, y, 1, 10);
     }
-  };
-  window.addEventListener('pointermove', onPointerMove, { passive: true });
-  cleanups.push(() => window.removeEventListener('pointermove', onPointerMove));
+  }, { passive: true });
 
-  // Pointer leave / enter
-  const onPointerLeave = () => {
-    if (cursorDot) cursorDot.classList.remove('active');
-  };
-  const onPointerEnter = () => {
-    if (cursorDot) cursorDot.classList.add('active');
-  };
-  document.addEventListener('mouseleave', onPointerLeave);
-  document.addEventListener('mouseenter', onPointerEnter);
-  cleanups.push(() => document.removeEventListener('mouseleave', onPointerLeave));
-  cleanups.push(() => document.removeEventListener('mouseenter', onPointerEnter));
+  on(document, 'mouseleave', () => wand.classList.remove('is-visible'));
+  on(document, 'mouseenter', () => wand.classList.add('is-visible'));
 
-  // Interactive Hover Detection
-  const onMouseOver = (e) => {
-    const target = e.target;
-    if (!target || !cursorDot) return;
-    const isInteractive = target.closest('a, button, input, textarea, select, [role="button"], summary, .btn-ink, .rm-node, .marauder-chamber');
-    if (isInteractive) {
-      cursorDot.classList.add('hovering');
-    } else {
-      cursorDot.classList.remove('hovering');
-    }
-  };
-  document.addEventListener('mouseover', onMouseOver, { passive: true });
-  cleanups.push(() => document.removeEventListener('mouseover', onMouseOver));
+  on(document, 'mouseover', (e) => {
+    const t = e.target instanceof Element ? e.target : null;
+    wand.classList.toggle('is-hover', !!t?.closest(INTERACTIVE));
+    wand.classList.toggle('is-text', !!t?.closest(TEXTUAL)); // native I-beam shows over text fields
+  }, { passive: true });
 
-  // Click Sparks Generation
-  const onPointerDown = (e) => {
-    if (isFiniteSuppressed || prefersReducedMotion) return;
-    spawnSparks(e.clientX, e.clientY);
-  };
-  window.addEventListener('pointerdown', onPointerDown, { passive: true });
-  cleanups.push(() => window.removeEventListener('pointerdown', onPointerDown));
+  on(window, 'pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;
+    wand.classList.add('is-down');
+    if (!prefersReducedMotion && !suppressed) emit(e.clientX, e.clientY, 7, 34);
+  }, { passive: true });
+  on(window, 'pointerup', () => wand.classList.remove('is-down'), { passive: true });
 
-  // Listen for FINITE spell
-  const onSpellFinite = () => {
-    isFiniteSuppressed = true;
-    if (cursorDot) cursorDot.classList.remove('active');
-    setTimeout(() => {
-      isFiniteSuppressed = false;
-    }, 4000);
-  };
-  window.addEventListener('chronicle:spell:finite', onSpellFinite);
-  cleanups.push(() => window.removeEventListener('chronicle:spell:finite', onSpellFinite));
-
-  // rAF Render Loop
-  isRunning = true;
-  function loop() {
-    if (!isRunning) return;
-
-    if (!isFiniteSuppressed) {
-      const dx = targetX - currentX;
-      const dy = targetY - currentY;
-      currentX += dx * 0.22;
-      currentY += dy * 0.22;
-
-      if (cursorDot) {
-        cursorDot.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      }
-    }
-
-    rafId = requestAnimationFrame(loop);
-  }
-  rafId = requestAnimationFrame(loop);
-
-  // Tab visibility management
-  const onVisibilityChange = () => {
-    if (document.hidden) {
-      if (rafId) cancelAnimationFrame(rafId);
-    } else {
-      if (isRunning) rafId = requestAnimationFrame(loop);
-    }
-  };
-  document.addEventListener('visibilitychange', onVisibilityChange);
-  cleanups.push(() => document.removeEventListener('visibilitychange', onVisibilityChange));
+  on(window, 'chronicle:spell:finite', () => {
+    suppressed = true;
+    setTimeout(() => { suppressed = false; }, 4000);
+  });
 
   return destroyCursor;
 }
 
-function spawnSparks(x, y) {
-  const sparkCount = 6;
-  const frag = document.createDocumentFragment();
-
-  for (let i = 0; i < sparkCount; i++) {
-    const spark = document.createElement('div');
-    spark.className = 'wand-spark';
-    spark.setAttribute('aria-hidden', 'true');
-
-    const angle = (i / sparkCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-    const distance = 14 + Math.random() * 22;
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance;
-    const size = 3 + Math.random() * 3;
-
-    spark.style.width = `${size}px`;
-    spark.style.height = `${size}px`;
-    spark.style.left = `${x}px`;
-    spark.style.top = `${y}px`;
-    spark.style.setProperty('--dx', `${dx}px`);
-    spark.style.setProperty('--dy', `${dy}px`);
-
-    frag.appendChild(spark);
-    setTimeout(() => spark.remove(), 450);
+/** Releases `count` pooled sparks from (px,py), each travelling up to `reach` px. */
+function emit(px, py, count, reach) {
+  for (let i = 0; i < count; i++) {
+    const s = sparks[sparkIdx++ % SPARKS];
+    const a = Math.random() * Math.PI * 2;
+    const d = reach * (0.4 + Math.random() * 0.6);
+    const size = 2 + Math.random() * 3;
+    s.style.cssText = `left:${px}px;top:${py}px;width:${size}px;height:${size}px`;
+    s.getAnimations().forEach((an) => an.cancel());
+    s.animate(
+      [
+        { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' },
+        { opacity: 0, transform: `translate(calc(-50% + ${Math.cos(a) * d}px), calc(-50% + ${Math.sin(a) * d + 8}px)) scale(0.2)` },
+      ],
+      { duration: 420 + Math.random() * 260, easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)', fill: 'both' },
+    );
   }
-
-  document.body.appendChild(frag);
 }
 
 export function destroyCursor() {
-  isRunning = false;
-  if (rafId) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
-  }
-  if (cursorDot && cursorDot.parentNode) {
-    cursorDot.parentNode.removeChild(cursorDot);
-    cursorDot = null;
-  }
-  cleanups.forEach(fn => fn());
+  cancelAnimationFrame(raf);
+  raf = 0;
+  cleanups.forEach((fn) => fn());
   cleanups = [];
+  wand?.remove();
+  sparks.forEach((s) => s.remove());
+  wand = null;
+  sparks = [];
+  document.documentElement.classList.remove('wand-on');
 }

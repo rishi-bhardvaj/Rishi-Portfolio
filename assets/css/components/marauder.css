@@ -77,7 +77,7 @@
 }
 
 .marauder-creators {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-style: italic;
   font-size: 0.9rem;
   letter-spacing: 0.08em;
@@ -95,7 +95,7 @@
 }
 
 .marauder-title {
-  font-family: 'Pirata One', 'Cinzel Decorative', cursive;
+  font-family: var(--font-heading);
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   line-height: 1;
   color: #2b1d0c;
@@ -190,7 +190,7 @@
 }
 
 .marauder-chamber-name {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.04em;
@@ -347,7 +347,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-style: italic;
   font-size: 0.85rem;
   color: #c9b183;

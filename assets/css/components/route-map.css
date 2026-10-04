@@ -106,3 +106,8 @@
 @media (prefers-reduced-motion: reduce) {
   .rm-node.current .rm-ring { animation: none; }
 }
+
+.route-map.many .rm-label { font-size: 0.6rem; }
+.route-map.many .rm-ring { width: 30px; height: 30px; }
+.route-map.many .rm-line { top: 15px; }
+.route-map.many .rm-fill { top: 14px; }

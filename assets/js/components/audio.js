@@ -6,6 +6,7 @@
 
 import { toggleSound, isSoundActive, playSfx } from '../core/audio.js';
 import { store } from '../core/store.js';
+import { toggleMusic, isMusicOn, resumeMusicOnGesture } from '../core/music.js';
 
 let cleanups = [];
 
@@ -25,17 +26,30 @@ export function initAudio() {
         : `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>`;
     });
 
-    // If music button exists, hide redundant secondary toggle
+    updateMusicButtons(isMusicOn());
+  }
+
+  function updateMusicButtons(playing) {
     [musicToggleBtn, mobileMusicToggleBtn].forEach(btn => {
       if (!btn) return;
-      btn.style.display = 'none';
+      btn.classList.remove('hidden');
+      btn.classList.toggle('is-playing', playing);
+      btn.setAttribute('aria-pressed', String(playing));
+      btn.title = playing ? 'Music: playing (click to stop)' : 'Music: enchanted theme (click to play)';
+      btn.setAttribute('aria-label', playing ? 'Stop background music' : 'Play background music');
     });
   }
 
-  const unsubscribe = store.subscribe('sound', (active) => {
-    updateButtons(active);
+  cleanups.push(store.subscribe('sound', (active) => updateButtons(active)));
+  cleanups.push(store.subscribe('music', (playing) => updateMusicButtons(playing)));
+
+  [musicToggleBtn, mobileMusicToggleBtn].forEach(btn => {
+    if (!btn) return;
+    const onMusic = () => { toggleMusic(); };
+    btn.addEventListener('click', onMusic);
+    cleanups.push(() => btn.removeEventListener('click', onMusic));
   });
-  cleanups.push(unsubscribe);
+  resumeMusicOnGesture();
 
   function handleToggle() {
     const active = toggleSound();
@@ -55,7 +69,7 @@ export function initAudio() {
   const onDocClick = (e) => {
     if (!isSoundActive()) return;
     const target = e.target.closest('button, a, input, select, textarea, .nav-link, .filter-tab-btn');
-    if (target && !target.closest('#soundToggleBtn') && !target.closest('#mobileSoundToggleBtn')) {
+    if (target && !target.closest('#soundToggleBtn, #mobileSoundToggleBtn, #musicToggleBtn, #mobileMusicToggleBtn')) {
       playSfx('click');
     }
   };

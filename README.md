@@ -225,3 +225,12 @@ Then visit `http://localhost:8000` (or the URL printed by your server) in any mo
 - **Copyright Integrity**: Free of third-party audio recordings, proprietary soundtrack melodies, or unauthorized assets.
 - **Zero Forbidden References**: Fully verified with 0 results across grep gates.
 - **Zero Build Step**: Native browser-first modern JavaScript, semantic HTML5, and vanilla CSS tokens.
+
+
+## Music, cursor and spells
+
+- **Music** (nav note icon, off by default): an original enchanted music-box piece is synthesised with Web Audio. To play your own *licensed* track instead, put it in `assets/audio/` and uncomment the `<meta name="music-file">` line in `index.html`.
+- **Wand cursor**: fine-pointer devices only; the native cursor returns over text fields and is untouched on touch screens.
+- **Spoken spells**: `assets/js/data/incantations.js` maps actions to spell words (LUMOS/NOX for theme, SONORUS/SILENCIO for sound, ALOHOMORA for opening things, and so on). Add `data-incant="WORD"` to any element to override.
+- **Fonts**: MedievalSharp (headings), EB Garamond (body), Space Mono (tiny technical labels only).
+- **Freelance projects**: three demo client stations (Storefront Forge, Clinic Compass, Ledgerly) sit beside the enterprise work in `data/projects.js`. They are marked `isDemo`: replace them with real client work. Station numbers are generated from order, never typed by hand.

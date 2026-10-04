@@ -20,6 +20,7 @@ import { initSpellBar } from './components/spell-bar.js';
 import { initMarauder } from './components/marauder.js';
 import { initCursor } from './components/cursor.js';
 import { initEasterEggs } from './components/easter-eggs.js';
+import { initIncantations } from './components/incantations.js';
 import { assertDom } from './core/dom.js';
 
 let teardowns = [];
@@ -49,6 +50,7 @@ export function initAll() {
     initSpellBar,
     initMarauder,
     initCursor,
+    initIncantations,
     initEasterEggs
   ];
 
